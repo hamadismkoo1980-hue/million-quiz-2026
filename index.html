@@ -36,7 +36,7 @@
             <p>2. بعد التحويل، اضغط على زر النسخ أدناه لتأخذ رقم الواتساب وتراسلنا لإرسال كود التفعيل فوراً.</p>
         </div>
         
-        <!-- زر النسخ الذكي المضمون بدلاً من الرابط التلقائي المعطل -->
+        <!-- زر النسخ الذكي المضمون بنسبة 100% -->
         <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 اضغط هنا لنسخ رقم واتساب الدعم فوراً</button>
         
         <hr style="border: 0.5px solid #3a506b; margin: 25px 0;">
@@ -68,13 +68,12 @@
 
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
 
-    // وظيفة النسخ الذكي لرقم الواتساب
+    // وظيفة النسخ الفوري للرقم دون الحاجة لروابط خارجية
     function copyWhatsAppNumber() {
         const number = "0933711873";
         navigator.clipboard.writeText(number).then(() => {
             alert("تم نسخ رقم الواتساب الخاص بالدعم ( " + number + " ) بنجاح!\n\nاذهب الآن إلى تطبيق الواتساب في هاتفك، وافتح محادثة جديدة مع الرقم المنسوخ وأرسل لقطة شاشة التحويل لتستلم كودك.");
         }).catch(err => {
-            // حل بديل في حال رفض المتصفح إذن النسخ التلقائي
             alert("يرجى نسخ الرقم يدوياً: " + number);
         });
     }
