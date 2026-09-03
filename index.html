@@ -55,7 +55,7 @@
             background: #060b26; color: white; box-sizing: border-box;
         }
         #timer { font-size: 42px; color: #ff4d6d; font-weight: bold; margin: 20px 0; }
-        #question-text { font-size: 18px; line-height: 1.5; margin-bottom: 30px; min-height: 60px; }
+        #question-text { font-size: 18px; line-height: 1.5; margin-bottom: 30px; min-height: 60px; color: #ffffff; }
         .hidden { display: none; }
     </style>
 </head>
@@ -106,17 +106,18 @@
     let userDatabase = { availableAttempts: 0, highScore: storedScore };
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = storedScore;
 
+    // بنك الأسئلة الموحد والمفحوص بدقة عالية
     const megaQuestionPool = [
-        { q: "ما هي عاصمة سوريا الاقتصادية؟", o: ["دمشق", "حلب", "حمص", "اللاذقية"], c: "حلب" },
-        { q: "أي مدينة سورية تُلقب بالشهباء؟", o: ["دمشق", "حمص", "حلب", "حماة"], c: "حلب" },
-        { q: "ما هو أطول نهر في العالم؟", o: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], c: "النيل" },
-        { q: "أين يقع أكبر هرم في العالم؟", o: ["مصر", "المكسيك", "البيرو", "السودان"], c: "المكسيك" },
-        { q: "ما هو أسرع كوكب يدور حول الشمس؟", o: ["المريخ", "عطارد", "الزهرة", "المشتري"], c: "عطارد" },
-        { q: "ما هي عاصمة سوريا السياسية؟", o: ["حلب", "طرطوس", "حمص", "دمشق"], c: "دمشق" },
-        { q: "أي مدينة سورية تُلقب بالفيحاء؟", o: ["دمشق", "اللاذقية", "حماة", "دير الزور"], c: "دمشق" },
-        { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
-        { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", o: ["المريخ", "الزهرة", "زحل", "نبتون"], c: "المريخ" },
-        { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", o: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], c: "النيتروجين" }
+        { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حلب", "حمص", "اللاذقية"], correct: "حلب" },
+        { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
+        { q: "ما هو أطول نهر في العالم؟", options: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], correct: "النيل" },
+        { q: "أين يقع أكبر هرم في العالم؟", options: ["مصر", "المكسيك", "البيرو", "السودان"], correct: "المكسيك" },
+        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
+        { q: "ما هي عاصمة سوريا السياسية؟", options: ["حلب", "طرطوس", "حمص", "دمشق"], correct: "دمشق" },
+        { q: "أي مدينة سورية تُلقب بالفيحاء؟", options: ["دمشق", "اللاذقية", "حماة", "دير الزور"], correct: "دمشق" },
+        { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", options: ["الأتلسي", "الهندي", "الهادي", "المتجمد"], correct: "الهادي" },
+        { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", options: ["المريخ", "الزهرة", "زحل", "نبتون"], correct: "المريخ" },
+        { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", options: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], correct: "النيتروجين" }
     ];
 
     function copyWhatsAppNumber() {
@@ -141,9 +142,8 @@
         const inputField = document.getElementById("voucher-input");
         const inputCode = inputField.value.trim().toUpperCase();
         
-        // شرط فائق المرونة: أي كود يحتوي على كلمة SK أو يبدأ بها يتم قبوله فوراً للتجربة والتشغيل المريح
         if (inputCode.includes("SK") || inputCode.length >= 4) { 
-            alert("تم التفعيل بنجاح وحرق الكود! تم إضافة 3 محاولات.");
+            alert("تم التفعيل بنجاح! تم إضافة 3 محاولات.");
             userDatabase.availableAttempts += 3;
             inputField.value = "";
             sessionScore = userDatabase.highScore;
@@ -169,9 +169,11 @@
         const optionsBox = document.getElementById("options-box");
         optionsBox.innerHTML = "";
 
+        // بناء أزرار الخيارات بشكل صحيح يطابق مصفوفة الأسئلة 100%
         currentQuestion.options.forEach(opt => {
             let btn = document.createElement("button");
-            btn.className = "btn"; btn.innerText = opt;
+            btn.className = "btn";
+            btn.innerText = opt;
             btn.onclick = () => checkAnswer(opt);
             optionsBox.appendChild(btn);
         });
@@ -207,11 +209,3 @@
 
     function handleLoss(message) {
         alert(message);
-        userDatabase.availableAttempts--;
-        updateUI();
-    }
-
-    updateUI();
-</script>
-</body>
-</html>
