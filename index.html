@@ -74,7 +74,7 @@
         <div class="rules-box">
             <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة والجوائز:</h3>
             • 🚀 <strong>الجائزة الكبرى:</strong> تبدأ من <span style="color: var(--gold-accent); font-weight: bold;">1,500</span> وتصل حتى <span style="color: var(--gold-accent); font-weight: bold;">30,000 ليرة جديدة</span>.<br>
-            • ⏱️ 10 ثوانٍ فقط للسؤال. نقاطك السابقة ومجموعك القياسي محفوظ دائمًا ولن تفقده عند شحن كود جديد!
+            • ⏱️ 10 ثوانٍ فقط للسؤال. نقاطك ومجموعك القياسي محفوظ دائمًا ولن تفقده عند شحن كود جديد!
         </div>
 
         <div class="payment-info">
@@ -102,12 +102,12 @@
 </div>
 
 <script>
-    // تعديل استراتيجي لحفظ واستعادة النقاط من ذاكرة الهاتف المستدامة LocalStorage
     let storedScore = localStorage.getItem("quiz_high_score") ? parseInt(localStorage.getItem("quiz_high_score")) : 0;
     
     let userDatabase = { availableAttempts: 0, highScore: storedScore };
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = storedScore;
 
+    // الأكواد الأساسية الفعالة للتجربة الحالية
     let validVouchers = ["SK-X9F2-R8W", "SK-K4M7-Q1P", "SK-N3J8-L6X", "SK-V5C2-Z9B", "SK-A7D1-W4M"];
     const megaQuestionPool = [];
     
@@ -118,9 +118,9 @@
             { q: "ما هو أطول نهر في العالم؟", o: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], c: "النيل" },
             { q: "أين يقع أكبر هرم في العالم؟", o: ["مصر", "المكسيك", "البيرو", "السودان"], c: "المكسيك" },
             { q: "ما هو أسرع كوكب يدور حول الشمس؟", o: ["المريخ", "عطارد", "الزهرة", "المشتري"], c: "عطارد" },
-            { q: "ما هي عاصمة سوريا السياسية؟", o: ["حلب", "طرطوس", "حمص", "دمشق"], c: "دمشق" },
+            { q: "ما هي عاصمة سوريا السياسية？", o: ["حلب", "طرطوس", "حمص", "دمشق"], c: "دمشق" },
             { q: "أي مدينة سورية تُلقب بالفيحاء؟", o: ["دمشق", "اللاذقية", "حماة", "دير الزور"], c: "دمشق" },
-            { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأاطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
+            { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
             { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", o: ["المريخ", "الزهرة", "زحل", "نبتون"], c: "المريخ" },
             { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", o: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], c: "النيتروجين" }
         ];
@@ -159,18 +159,17 @@
         const inputField = document.getElementById("voucher-input");
         const inputCode = inputField.value.trim().toUpperCase();
         
+        // فحص الأكواد المدمجة أو أي كود خارجي يبدأ بالتنسيق الصحيح وطوله كافٍ
         if (validVouchers.includes(inputCode) || (inputCode.startsWith("SK-") && inputCode.length >= 10)) { 
-            alert("تم التحقق بنجاح! تم حرق الكود من النظام وضخ 3 محاولات جديدة مع الحفاظ على رصيد نقاطك السابقة.");
+            alert("تم التحقق بنجاح! تم حرق الكود من النظام وضخ 3 محاولات جديدة.");
             userDatabase.availableAttempts += 3;
             validVouchers = validVouchers.filter(c => c !== inputCode);
             inputField.value = "";
-            
-            // إعادة ضبط نقاط الجلسة الحالية لتستند لأعلى رقم محفوظ بدلاً من الصفر
             sessionScore = userDatabase.highScore;
             updateUI();
             startNewAttempt();
         } else {
-            alert("عذراً، هذا الكود خاطئ أو تم حرقه واستخدامه مسبقاً!");
+            alert("عذراً، هذا الكود خاطئ أو تم استخدامه وحرقه مسبقاً!");
             inputField.value = "";
         }
     }
@@ -181,6 +180,8 @@
         clearInterval(timerInterval);
         timeLeft = 10;
         document.getElementById("timer").innerText = timeLeft;
+
+        if(megaQuestionPool.length === 0) generateMegaQuestionBank();
 
         const randomIndex = Math.floor(Math.random() * megaQuestionPool.length);
         currentQuestion = megaQuestionPool[randomIndex];
@@ -203,3 +204,5 @@
         }, 1000);
     }
 
+    function checkAnswer(selectedOption) {
+        clearInterval(timerInterval);
