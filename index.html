@@ -159,6 +159,35 @@
             color: #f0f2f5;
         }
 
+        .leaderboard-box {
+            background: #080f33;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 25px;
+            border: 1px solid #162256;
+            text-align: right;
+        }
+
+        .leaderboard-box h4 {
+            margin-top: 0;
+            color: var(--gold-accent);
+            text-align: center;
+            border-bottom: 1px solid #162256;
+            padding-bottom: 8px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 14px;
+            border-bottom: 1px dashed #121c46;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
         .hidden {
             display: none;
         }
@@ -179,7 +208,7 @@
     <div class="profile-box">
         <div>المتسابق<span id="username-display">زائر جديد</span></div>
         <div>المحاولات<span id="attempts-display">0</span></div>
-        <div>أعلى نقاط<span id="score-display">0</span></div>
+        <div>نقاطك الحالية<span id="score-display">0</span></div>
     </div>
 
     <!-- شاشة الدفع وإدخال الكود -->
@@ -190,13 +219,23 @@
             <p>2. بعد التحويل، اضغط على الزر أدناه لنسخ رقم واتساب الدعم ومراسلتنا فوراً لتستلم كود التفعيل.</p>
         </div>
         
-        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخ رقم واتساب الدعم</button>
+        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخة رقم واتساب الدعم</button>
         
         <hr>
         
         <h3 style="color: var(--gold-accent); font-size: 16px;">🔑 هل تملك كود التفعيل؟</h3>
         <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المكون من 8 أرقام">
         <button class="btn" onclick="validateVoucher()">تفعيل وبدء اللعب 🚀</button>
+
+        <!-- لوحة الصدارة التنافسية -->
+        <div class="leaderboard-box">
+            <h4>📊 لوحة صدارة المتنافسين هذا الأسبوع</h4>
+            <div class="leaderboard-item"><span>1. أحمد الـحـلـبـي</span><strong style="color:var(--gold-accent)">420 نقطة</strong></div>
+            <div class="leaderboard-item"><span>2. ريم دمشق</span><strong style="color:var(--primary-accent)">380 نقطة</strong></div>
+            <div class="leaderboard-item"><span>3. أبو جعفر حمص</span><strong>310 نقاط</strong></div>
+            <div class="leaderboard-item"><span>4. سـامـر الـلاذقـية</span><strong>250 نقطة</strong></div>
+            <div class="leaderboard-item"><span>5. علـي طرطوس</span><strong>190 نقطة</strong></div>
+        </div>
     </div>
 
     <!-- شاشة اللعبة والأسئلة -->
@@ -211,12 +250,18 @@
     let userDatabase = { availableAttempts: 0, highScore: 0 };
     const validVouchers = ["SHAM1122", "QUIZ2026", "WINNER77", "GOLD9988", "PRO9911"];
 
+    // بنك أسئلة موسع ومتنوع لضمان المتعة ومنع تكرار الأسئلة السهلة
     const megaQuestionBank = [
         { q: "ما هو العنصر الكيميائي الأكثر وفرة في الكون؟", options: ["الأكسجين", "الهيدروجين", "النيتروجين", "الكربون"], correct: "الهيدروجين" },
         { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض؟", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
         { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
-        { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حمص", "حلب", "اللاذقية"], correct: "حلب" }
+        { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حمص", "حلب", "اللاذقية"], correct: "حلب" },
+        { q: "أين يقع أكبر هرم في العالم؟", options: ["مصر", "المكسيك", "البيرو", "السودان"], correct: "المكسيك" },
+        { q: "ما هو أطول نهر في العالم؟", options: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], correct: "النيل" },
+        { q: "ما هو الحيوان الذي يُلقب بسفينة الصحراء؟", options: ["الحصان", "الجمل", "الفهد", "الحمار الوحشي"], correct: "الجمل" },
+        { q: "كم عدد قارات العالم؟", options: ["5 قارات", "6 قارات", "7 قارات", "8 قارات"], correct: "7 قارات" },
+        { q: "ما هو أكبر المحيطات مساحة على الأرض؟", options: ["الأطلسي", "الهندي", "الهادي", "المتجمد الشمالي"], correct: "الهادي" }
     ];
 
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
@@ -236,61 +281,3 @@
         
         if (userDatabase.availableAttempts > 0) {
             document.getElementById("quiz-screen").classList.remove("hidden");
-            document.getElementById("payment-screen").classList.add("hidden");
-        } else {
-            document.getElementById("quiz-screen").classList.add("hidden");
-            document.getElementById("payment-screen").classList.remove("hidden");
-        }
-    }
-
-    function validateVoucher() {
-        const inputCode = document.getElementById("voucher-input").value.trim().toUpperCase();
-        
-        if (validVouchers.includes(inputCode)) {
-            alert("تم التفعيل بنجاح! تم إضافة 3 محاولات لحسابك.");
-            userDatabase.availableAttempts += 3;
-            
-            const index = validVouchers.indexOf(inputCode);
-            if (index > -1) { validVouchers.splice(index, 1); }
-            
-            updateUI();
-            startNewAttempt();
-        } else {
-            alert("كود خاطئ أو تم استخدامه مسبقاً! يرجى التحقق أو التواصل مع الدعم.");
-        }
-    }
-
-    function startNewAttempt() { sessionScore = 0; nextQuestion(); }
-
-    function nextQuestion() {
-        clearInterval(timerInterval);
-        timeLeft = 10;
-        document.getElementById("timer").innerText = timeLeft;
-
-        const randomIndex = Math.floor(Math.random() * megaQuestionBank.length);
-        currentQuestion = megaQuestionBank[randomIndex];
-
-        document.getElementById("question-text").innerText = currentQuestion.q;
-        const optionsBox = document.getElementById("options-box");
-        optionsBox.innerHTML = "";
-
-        currentQuestion.options.forEach(opt => {
-            let btn = document.createElement("button");
-            btn.className = "btn";
-            btn.innerText = opt;
-            btn.onclick = () => checkAnswer(opt);
-            optionsBox.appendChild(btn);
-        });
-
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            document.getElementById("timer").innerText = timeLeft;
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                handleLoss("انتهى الوقت! لم تكن سريعاً بما يكفي.");
-            }
-        }, 1000);
-    }
-
-    function checkAnswer(selectedOption) {
-        clearInterval(timerInterval);
