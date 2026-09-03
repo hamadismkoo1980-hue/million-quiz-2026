@@ -9,8 +9,8 @@
         .profile-box { background: #3a506b; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around; font-weight: bold; }
         .btn { background: #00b4d8; color: white; border: none; padding: 12px 25px; margin: 10px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: 0.3s; width: 80%; text-decoration: none; display: inline-block; }
         .btn:hover { background: #90e0ef; color: #0b132b; }
-        .btn-whatsapp { background: #25D366; }
-        .btn-whatsapp:hover { background: #1ebd58; color: white; }
+        .btn-whatsapp { background: #25D366; color: white !important; }
+        .btn-whatsapp:hover { background: #1ebd58; }
         .input-code { padding: 12px; width: 75%; font-size: 18px; text-align: center; border-radius: 5px; border: 2px solid #00b4d8; margin: 10px 0; background: #0b132b; color: white; }
         #timer { font-size: 28px; color: #ff4d6d; font-weight: bold; margin: 15px 0; }
         .hidden { display: none; }
@@ -36,8 +36,8 @@
             <p>2. بعد التحويل، اضغط على الزر أدناه لإرسال إشعار التحويل عبر واتساب واستلام كود التفعيل فوراً.</p>
         </div>
         
-        <!-- زر التحويل التلقائي للواتساب الخاص بك -->
-        <a href="https://wa.meً%20شريكي%20لقد%20قمت%20بالتحويل%20عبر%20شام%20كاش%20أريد%20كود%20تفعيل%20المسابقة" target="_blank" class="btn btn-whatsapp">📱 اضغط هنا لإرسال إشعار التحويل عبر واتساب</a>
+        <!-- الرابط العالمي المطور للواتساب لمنع الشاشة السوداء -->
+        <a href="https://whatsapp.com" target="_blank" class="btn btn-whatsapp">📱 اضغط هنا لإرسال إشعار التحويل عبر واتساب</a>
         
         <hr style="border: 0.5px solid #3a506b; margin: 25px 0;">
         
@@ -57,12 +57,12 @@
 <script>
     let userDatabase = { availableAttempts: 0, highScore: 0 };
 
-    // قائمة الأكواد الصالحة للتفعيل لتعطيها للمشتركين بعد الدفع
+    // الأكواد الصالحة للتفعيل
     const validVouchers = ["SHAM1122", "QUIZ2026", "WINNER77", "GOLD9988", "PRO9911"];
 
     const megaQuestionBank = [
         { q: "ما هو العنصر الكيميائي الأكثر وفرة في الكون؟", options: ["الأكسجين", "الهيدروجين", "النيتروجين", "الكربون"], correct: "الهيدروجين" },
-        { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض؟", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
+        { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض？", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
         { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
         { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حمص", "حلب", "اللاذقية"], correct: "حلب" }
@@ -75,11 +75,11 @@
         document.getElementById("score-display").innerText = userDatabase.highScore;
         
         if (userDatabase.availableAttempts > 0) {
-            document.getElementById("payment-screen").classList.add("hidden");
             document.getElementById("quiz-screen").classList.remove("hidden");
+            document.getElementById("payment-screen").classList.add("hidden");
         } else {
-            document.getElementById("payment-screen").classList.remove("hidden");
             document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("payment-screen").classList.remove("hidden");
         }
     }
 
@@ -90,7 +90,6 @@
             alert("تم التفعيل بنجاح! تم إضافة 3 محاولات لحسابك.");
             userDatabase.availableAttempts += 3;
             
-            // إزالة الكود مؤقتاً لضمان عدم استخدامه مجدداً في نفس الجلسة
             const index = validVouchers.indexOf(inputCode);
             if (index > -1) { validVouchers.splice(index, 1); }
             
