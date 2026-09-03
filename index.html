@@ -2,19 +2,173 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>مسابقة المليون الاحترافية - نظام التفعيل</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مسابقة المليون الاحترافية</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; text-align: center; padding: 20px; }
-        .container { background: #1c2541; max-width: 700px; margin: 30px auto; padding: 30px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); border: 1px solid #48cae4; }
-        .profile-box { background: #3a506b; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around; font-weight: bold; }
-        .btn { background: #00b4d8; color: white; border: none; padding: 12px 25px; margin: 10px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: 0.3s; width: 80%; text-decoration: none; display: inline-block; }
-        .btn:hover { background: #90e0ef; color: #0b132b; }
-        .btn-whatsapp { background: #25D366; color: white; }
-        .btn-whatsapp:hover { background: #1ebd58; }
-        .input-code { padding: 12px; width: 75%; font-size: 18px; text-align: center; border-radius: 5px; border: 2px solid #00b4d8; margin: 10px 0; background: #0b132b; color: white; }
-        #timer { font-size: 28px; color: #ff4d6d; font-weight: bold; margin: 15px 0; }
-        .hidden { display: none; }
-        .payment-info { background: #232f3e; padding: 15px; border-radius: 8px; border-left: 5px solid #2a9d8f; text-align: right; margin-bottom: 20px; }
+        :root {
+            --bg-color: #03081e;
+            --container-bg: #0a1138;
+            --primary-accent: #00f2fe;
+            --gold-accent: #ffd700;
+            --success-color: #2a9d8f;
+            --error-color: #e76f51;
+            --text-main: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: radial-gradient(circle, #0c164f 0%, var(--bg-color) 100%);
+            color: var(--text-main);
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background: rgba(10, 17, 56, 0.95);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 20px;
+            padding: 25px 20px;
+            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
+            border: 2px solid #1e295d;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 24px;
+            color: var(--gold-accent);
+            text-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .profile-box {
+            background: #121b4d;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            border: 1px solid #1e2d75;
+        }
+
+        .profile-box div {
+            flex: 1;
+        }
+
+        .profile-box span {
+            color: var(--primary-accent);
+            font-weight: bold;
+            display: block;
+            font-size: 16px;
+            margin-top: 3px;
+        }
+
+        .payment-info {
+            background: #0f194c;
+            padding: 18px;
+            border-radius: 12px;
+            border-right: 4px solid var(--gold-accent);
+            text-align: right;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .payment-info h3 {
+            margin-top: 0;
+            color: var(--gold-accent);
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #102375 0%, #1b36ab 100%);
+            color: white;
+            border: 1px solid var(--primary-accent);
+            padding: 16px 20px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            width: 100%;
+            box-sizing: border-box;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--primary-accent);
+            color: #03081e;
+            box-shadow: 0 0 15px var(--primary-accent);
+            transform: translateY(-2px);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(90deg, #1ebd58 0%, #25D366 100%);
+            border: none;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            color: white;
+            box-shadow: 0 0 15px #25D366;
+        }
+
+        .input-code {
+            padding: 14px;
+            width: 100%;
+            font-size: 18px;
+            text-align: center;
+            border-radius: 30px;
+            border: 2px solid #1e2d75;
+            margin: 15px 0;
+            background: #060b26;
+            color: white;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-code:focus {
+            border-color: var(--primary-accent);
+        }
+
+        #timer {
+            font-size: 36px;
+            color: #ff4d6d;
+            font-weight: bold;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
+        }
+
+        #question-text {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #f0f2f5;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #1e2d75, transparent);
+            margin: 25px 0;
+        }
     </style>
 </head>
 <body>
@@ -23,33 +177,32 @@
     <h1>🏆 مسابقة المليون الرقمية 🏆</h1>
     
     <div class="profile-box">
-        <div>المتسابق: <span id="username-display">زائر جديد</span></div>
-        <div>المحاولات المتاحة: <span id="attempts-display">0</span></div>
-        <div>أعلى نقاط: <span id="score-display">0</span></div>
+        <div>المتسابق<span id="username-display">زائر جديد</span></div>
+        <div>المحاولات<span id="attempts-display">0</span></div>
+        <div>أعلى نقاط<span id="score-display">0</span></div>
     </div>
 
-    <!-- شاشة الدفع اليدوي وإدخال الكود -->
+    <!-- شاشة الدفع وإدخال الكود -->
     <div id="payment-screen">
         <div class="payment-info">
             <h3>💳 طريقة الاشتراك وتفعيل اللعب:</h3>
-            <p>1. قم بتحويل قيمة الاشتراك (ما يعادل 1 دولار بالليرة) إلى حساب شام كاش رقم: <strong style="color: #00b4d8; font-size: 18px;">8020541796461939</strong></p>
-            <p>2. بعد التحويل، اضغط على زر النسخ أدناه لتأخذ رقم الواتساب وتراسلنا لإرسال كود التفعيل فوراً.</p>
+            <p>1. قم بتحويل قيمة الاشتراك إلى حساب شام كاش رقم:<br><strong style="color: var(--primary-accent); font-size: 16px;">8020541796461939</strong></p>
+            <p>2. بعد التحويل، اضغط على الزر أدناه لنسخ رقم واتساب الدعم ومراسلتنا فوراً لتستلم كود التفعيل.</p>
         </div>
         
-        <!-- زر النسخ الذكي المضمون بنسبة 100% -->
-        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 اضغط هنا لنسخ رقم واتساب الدعم فوراً</button>
+        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخ رقم واتساب الدعم</button>
         
-        <hr style="border: 0.5px solid #3a506b; margin: 25px 0;">
+        <hr>
         
-        <h3>🔑 هل تملك كود التفعيل؟ أدخله هنا:</h3>
+        <h3 style="color: var(--gold-accent); font-size: 16px;">🔑 هل تملك كود التفعيل؟</h3>
         <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المكون من 8 أرقام">
-        <button class="btn" onclick="validateVoucher()">تفعيل المحاولات وبدء اللعب 🚀</button>
+        <button class="btn" onclick="validateVoucher()">تفعيل وبدء اللعب 🚀</button>
     </div>
 
     <!-- شاشة اللعبة والأسئلة -->
     <div id="quiz-screen" class="hidden">
-        <h3 id="question-text">جاري تجهيز السؤال العشوائي...</h3>
-        <div id="timer">الوقت المتبقي: 10</div>
+        <div id="question-text">جاري تجهيز السؤال العشوائي...</div>
+        <div id="timer">10</div>
         <div id="options-box"></div>
     </div>
 </div>
@@ -68,7 +221,6 @@
 
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
 
-    // وظيفة النسخ الفوري للرقم دون الحاجة لروابط خارجية
     function copyWhatsAppNumber() {
         const number = "0933711873";
         navigator.clipboard.writeText(number).then(() => {
@@ -113,7 +265,7 @@
     function nextQuestion() {
         clearInterval(timerInterval);
         timeLeft = 10;
-        document.getElementById("timer").innerText = `الوقت المتبقي: ${timeLeft}`;
+        document.getElementById("timer").innerText = timeLeft;
 
         const randomIndex = Math.floor(Math.random() * megaQuestionBank.length);
         currentQuestion = megaQuestionBank[randomIndex];
@@ -132,7 +284,7 @@
 
         timerInterval = setInterval(() => {
             timeLeft--;
-            document.getElementById("timer").innerText = `الوقت المتبقي: ${timeLeft}`;
+            document.getElementById("timer").innerText = timeLeft;
             if (timeLeft <= 0) {
                 clearInterval(timerInterval);
                 handleLoss("انتهى الوقت! لم تكن سريعاً بما يكفي.");
@@ -142,24 +294,3 @@
 
     function checkAnswer(selectedOption) {
         clearInterval(timerInterval);
-        if (selectedOption === currentQuestion.correct) {
-            sessionScore += 10;
-            if(sessionScore > userDatabase.highScore) { userDatabase.highScore = sessionScore; }
-            alert("إجابة صحيحة! أحسنت.");
-            updateUI();
-            nextQuestion();
-        } else {
-            handleLoss("إجابة خاطئة! خرجت من المحاولة.");
-        }
-    }
-
-    function handleLoss(message) {
-        alert(message);
-        userDatabase.availableAttempts--;
-        updateUI();
-    }
-
-    updateUI();
-</script>
-</body>
-</html>
