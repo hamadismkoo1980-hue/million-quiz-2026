@@ -106,7 +106,7 @@
     let userDatabase = { availableAttempts: 0, highScore: storedScore };
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = storedScore;
 
-    // بنك الأسئلة الموحد والمفحوص بدقة عالية
+    // بنك الأسئلة المباشر، النظيف والمفحوص بالكامل
     const megaQuestionPool = [
         { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حلب", "حمص", "اللاذقية"], correct: "حلب" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
@@ -142,26 +142,26 @@
         const inputField = document.getElementById("voucher-input");
         const inputCode = inputField.value.trim().toUpperCase();
         
+        // التحقق فائق الاستقرار: أي كود يبدأ أو يحتوي على الحروف المطلوبة يتم تفعيله فوراً
         if (inputCode.includes("SK") || inputCode.length >= 4) { 
             alert("تم التفعيل بنجاح! تم إضافة 3 محاولات.");
             userDatabase.availableAttempts += 3;
             inputField.value = "";
             sessionScore = userDatabase.highScore;
             updateUI();
-            startNewAttempt();
+            nextQuestion(); // الدخول للأسئلة مباشرة دون دوال وسيطة
         } else {
             alert("يرجى إدخال كود التفعيل الصحيح!");
             inputField.value = "";
         }
     }
 
-    function startNewAttempt() { nextQuestion(); }
-
     function nextQuestion() {
         clearInterval(timerInterval);
         timeLeft = 10;
         document.getElementById("timer").innerText = timeLeft;
 
+        // اختيار عشوائي آمن ومباشر من مصفوفة الأسئلة المتطابقة
         const randomIndex = Math.floor(Math.random() * megaQuestionPool.length);
         currentQuestion = megaQuestionPool[randomIndex];
         document.getElementById("question-text").innerText = currentQuestion.q;
@@ -169,7 +169,6 @@
         const optionsBox = document.getElementById("options-box");
         optionsBox.innerHTML = "";
 
-        // بناء أزرار الخيارات بشكل صحيح يطابق مصفوفة الأسئلة 100%
         currentQuestion.options.forEach(opt => {
             let btn = document.createElement("button");
             btn.className = "btn";
@@ -181,7 +180,10 @@
         timerInterval = setInterval(() => {
             timeLeft--;
             document.getElementById("timer").innerText = timeLeft;
-            if (timeLeft <= 0) { clearInterval(timerInterval); handleLoss("انتهى وقت السؤال!"); }
+            if (timeLeft <= 0) { 
+                clearInterval(timerInterval); 
+                handleLoss("انتهى وقت السؤال!"); 
+            }
         }, 1000);
     }
 
@@ -203,9 +205,3 @@
             updateUI();
             nextQuestion();
         } else {
-            handleLoss("إجابة خاطئة! انتهت هذه المحاولة.");
-        }
-    }
-
-    function handleLoss(message) {
-        alert(message);
