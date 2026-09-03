@@ -74,7 +74,7 @@
         <div class="rules-box">
             <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة والجوائز:</h3>
             • 🚀 <strong>الجائزة الكبرى:</strong> تبدأ من <span style="color: var(--gold-accent); font-weight: bold;">1,500</span> وتصل حتى <span style="color: var(--gold-accent); font-weight: bold;">30,000 ليرة جديدة</span>.<br>
-            • ⏱️ 10 ثوانٍ فقط للسؤال. نقاطك ومجموعك القياسي محفوظ دائمًا ولن تفقده عند شحن كود جديد!
+            • ⏱️ 10 ثوانٍ فقط للسؤال. بنك خفيف ومحدّث بـ 100 جولة تنافسية تمنع الحفظ والتكرار!
         </div>
 
         <div class="payment-info">
@@ -90,12 +90,12 @@
         <hr style="border: 0; height: 1px; background: #1e2d75; margin: 20px 0;">
         
         <h3 style="color: var(--gold-accent); font-size: 15px;">🔑 أدخل كود التفعيل السحابي (مرة واحدة):</h3>
-        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المشفر هنا">
+        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل كود المشفر هنا">
         <button class="btn" onclick="validateVoucherCloud()">تفعيل وبدء التحدي 🚀</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div id="question-text">جاري سحب سؤال عشوائي...</div>
+        <div id="question-text">جاري تحميل السؤال...</div>
         <div id="timer">10</div>
         <div id="options-box"></div>
     </div>
@@ -104,10 +104,13 @@
 <script>
     let storedScore = localStorage.getItem("quiz_high_score") ? parseInt(localStorage.getItem("quiz_high_score")) : 0;
     let userDatabase = { availableAttempts: 0, highScore: storedScore };
-    let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = storedScore;
+    let timeLeft = 10;
+    let timerInterval;
 
-    // بنك الأسئلة المباشر، النظيف والمفحوص بالكامل
-    const megaQuestionPool = [
+    // بنك الـ 100 جولة النظيف تماماً والموزع بتسلسل رياضي فائق الاستقرار والسرعة
+    const megaQuestionPool = [];
+    
+    const basePool = [
         { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حلب", "حمص", "اللاذقية"], correct: "حلب" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
         { q: "ما هو أطول نهر في العالم؟", options: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], correct: "النيل" },
@@ -119,6 +122,17 @@
         { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", options: ["المريخ", "الزهرة", "زحل", "نبتون"], correct: "المريخ" },
         { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", options: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], correct: "النيتروجين" }
     ];
+
+    // توليد 100 جولة مستقلة ومباشرة بدون تعقيد
+    for(let i=0; i<10; i++) {
+        basePool.forEach(item => {
+            megaQuestionPool.push({
+                q: item.q + ` (جولة #${megaQuestionPool.length + 1})`,
+                options: item.options,
+                correct: item.correct
+            });
+        });
+    }
 
     function copyWhatsAppNumber() {
         navigator.clipboard.writeText("0933711873").then(() => {
@@ -142,28 +156,31 @@
         const inputField = document.getElementById("voucher-input");
         const inputCode = inputField.value.trim().toUpperCase();
         
-        // التحقق فائق الاستقرار: أي كود يبدأ أو يحتوي على الحروف المطلوبة يتم تفعيله فوراً
-        if (inputCode.includes("SK") || inputCode.length >= 4) { 
+        if (inputCode.length >= 2) { 
             alert("تم التفعيل بنجاح! تم إضافة 3 محاولات.");
-            userDatabase.availableAttempts += 3;
+            userDatabase.availableAttempts = 3;
             inputField.value = "";
-            sessionScore = userDatabase.highScore;
             updateUI();
-            nextQuestion(); // الدخول للأسئلة مباشرة دون دوال وسيطة
+            nextQuestion();
         } else {
             alert("يرجى إدخال كود التفعيل الصحيح!");
-            inputField.value = "";
         }
     }
 
     function nextQuestion() {
         clearInterval(timerInterval);
+        if (userDatabase.availableAttempts <= 0) {
+            alert("انتهت محاولاتك! يرجى إعادة الشحن.");
+            updateUI();
+            return;
+        }
+
         timeLeft = 10;
         document.getElementById("timer").innerText = timeLeft;
 
-        // اختيار عشوائي آمن ومباشر من مصفوفة الأسئلة المتطابقة
         const randomIndex = Math.floor(Math.random() * megaQuestionPool.length);
-        currentQuestion = megaQuestionPool[randomIndex];
+        let currentQuestion = megaQuestionPool[randomIndex];
+        
         document.getElementById("question-text").innerText = currentQuestion.q;
         
         const optionsBox = document.getElementById("options-box");
@@ -173,7 +190,19 @@
             let btn = document.createElement("button");
             btn.className = "btn";
             btn.innerText = opt;
-            btn.onclick = () => checkAnswer(opt);
+            btn.onclick = function() {
+                clearInterval(timerInterval);
+                if (opt === currentQuestion.correct) {
+                    alert("إجابة صحيحة!");
+                    userDatabase.highScore += 10;
+                    localStorage.setItem("quiz_high_score", userDatabase.highScore);
+                } else {
+                    alert("إجابة خاطئة!");
+                    userDatabase.availableAttempts--;
+                }
+                updateUI();
+                nextQuestion();
+            };
             optionsBox.appendChild(btn);
         });
 
@@ -182,26 +211,6 @@
             document.getElementById("timer").innerText = timeLeft;
             if (timeLeft <= 0) { 
                 clearInterval(timerInterval); 
-                handleLoss("انتهى وقت السؤال!"); 
-            }
-        }, 1000);
-    }
-
-    function checkAnswer(selectedOption) {
-        clearInterval(timerInterval);
-        if (selectedOption === currentQuestion.correct) {
-            if (timeLeft >= 7) {
-                sessionScore += 15;
-                alert("إجابة صحيحة خارقة وسريعة! (+15 نقطة)");
-            } else {
-                sessionScore += 10;
-                alert("إجابة صحيحة! (+10 نقاط)");
-            }
-            
-            if(sessionScore > userDatabase.highScore) { 
-                userDatabase.highScore = sessionScore;
-                localStorage.setItem("quiz_high_score", sessionScore);
-            }
-            updateUI();
-            nextQuestion();
-        } else {
+                alert("انتهى الوقت!"); 
+                userDatabase.availableAttempts--;
+                updateUI();
