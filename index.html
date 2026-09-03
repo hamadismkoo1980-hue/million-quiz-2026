@@ -67,23 +67,22 @@
     <div class="profile-box">
         <div>المتسابق<span id="username-display">زائر جديد</span></div>
         <div>المحاولات<span id="attempts-display">0</span></div>
-        <div>النقاط<span id="score-display">0</span></div>
+        <div>رقمك القياسي🏆<span id="score-display">0</span></div>
     </div>
 
     <div id="payment-screen">
         <div class="rules-box">
             <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة والجوائز:</h3>
-            • 🚀 <strong>الجائزة الكبرى:</strong> تبدأ من <span style="color: var(--gold-accent); font-weight: bold;">1,500</span> وتصل حتى <span style="color: var(--gold-accent); font-weight: bold;">30,000 ليرة جديدة</span> (تزداد تصاعدياً مع زيادة المشتركين!).<br>
-            • ⏱️ 10 ثوانٍ فقط للسؤال. بنك ضخم يحتوي على 500+ سؤال عشوائي يمنع الحفظ والتكرار تماماً!<br>
-            • السرعة الخارقة (أول 3 ثوانٍ) تمنحك <strong>+5 نقاط إضافية!</strong>
+            • 🚀 <strong>الجائزة الكبرى:</strong> تبدأ من <span style="color: var(--gold-accent); font-weight: bold;">1,500</span> وتصل حتى <span style="color: var(--gold-accent); font-weight: bold;">30,000 ليرة جديدة</span>.<br>
+            • ⏱️ 10 ثوانٍ فقط للسؤال. نقاطك السابقة ومجموعك القياسي محفوظ دائمًا ولن تفقده عند شحن كود جديد!
         </div>
 
         <div class="payment-info">
             <h3>💳 طريقة الشحن الفوري بالعملة المحلية:</h3>
-            1. قيمة الاشتراك ودخول التحدي (شراء 3 محاولات) هي: <strong style="color: var(--gold-accent); font-size: 16px;">150 ليرة سورية جديدة فقط</strong>.<br>
+            1. قيمة الاشتراك ودخول التحدي (3 محاولات) هي: <strong style="color: var(--gold-accent); font-size: 16px;">150 ليرة جديدة فقط</strong>.<br>
             2. حوّل المبلغ إلى حساب شام كاش رقم:<br>
             <strong style="color: var(--primary-accent); font-size: 16px;">8020541796461939</strong><br>
-            3. اضغط بالأسفل لنسخ رقم الإدارة وإرسال الإشعار عبر الواتساب لاستلام كودك فوراً.
+            3. انسخ رقم الإدارة وأرسل إشعار التحويل عبر الواتساب لاستلام كودك فوراً.
         </div>
         
         <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخ رقم واتساب الإدارة</button>
@@ -96,19 +95,20 @@
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div id="question-text">جاري سحب سؤال عشوائي من الخزنة...</div>
+        <div id="question-text">جاري سحب سؤال عشوائي...</div>
         <div id="timer">10</div>
         <div id="options-box"></div>
     </div>
 </div>
 
 <script>
-    let userDatabase = { availableAttempts: 0, highScore: 0 };
-    let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
+    // تعديل استراتيجي لحفظ واستعادة النقاط من ذاكرة الهاتف المستدامة LocalStorage
+    let storedScore = localStorage.getItem("quiz_high_score") ? parseInt(localStorage.getItem("quiz_high_score")) : 0;
+    
+    let userDatabase = { availableAttempts: 0, highScore: storedScore };
+    let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = storedScore;
 
     let validVouchers = ["SK-X9F2-R8W", "SK-K4M7-Q1P", "SK-N3J8-L6X", "SK-V5C2-Z9B", "SK-A7D1-W4M"];
-
-    // محرّك ومخزن بنك الأسئلة الـ 500 المولد ذكياً لتغطية كافة الاحتمالات بدقة فائقة
     const megaQuestionPool = [];
     
     function generateMegaQuestionBank() {
@@ -116,22 +116,21 @@
             { q: "ما هي عاصمة سوريا الاقتصادية؟", o: ["دمشق", "حلب", "حمص", "اللاذقية"], c: "حلب" },
             { q: "أي مدينة سورية تُلقب بالشهباء؟", o: ["دمشق", "حمص", "حلب", "حماة"], c: "حلب" },
             { q: "ما هو أطول نهر في العالم؟", o: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], c: "النيل" },
-            { q: "أين يقع أكبر هرم في العالم؟", o: ["مصر", "المكسيك", "البيرو", "السودان"], o_c: "المكسيك" },
+            { q: "أين يقع أكبر هرم في العالم؟", o: ["مصر", "المكسيك", "البيرو", "السودان"], c: "المكسيك" },
             { q: "ما هو أسرع كوكب يدور حول الشمس؟", o: ["المريخ", "عطارد", "الزهرة", "المشتري"], c: "عطارد" },
             { q: "ما هي عاصمة سوريا السياسية؟", o: ["حلب", "طرطوس", "حمص", "دمشق"], c: "دمشق" },
             { q: "أي مدينة سورية تُلقب بالفيحاء؟", o: ["دمشق", "اللاذقية", "حماة", "دير الزور"], c: "دمشق" },
-            { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
+            { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأاطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
             { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", o: ["المريخ", "الزهرة", "زحل", "نبتون"], c: "المريخ" },
             { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", o: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], c: "النيتروجين" }
         ];
 
-        // مصفوفة منوعة من 500 سؤال وجواب تغطي العلوم والتاريخ والجغرافيا والأدب والرياضيات
         for (let i = 0; i < 50; i++) {
             categories.forEach(item => {
                 megaQuestionPool.push({
                     q: item.q + ` (جولة #${i+1})`,
                     options: item.o,
-                    correct: item.c || item.o_c
+                    correct: item.c
                 });
             });
         }
@@ -161,10 +160,13 @@
         const inputCode = inputField.value.trim().toUpperCase();
         
         if (validVouchers.includes(inputCode) || (inputCode.startsWith("SK-") && inputCode.length >= 10)) { 
-            alert("تم التحقق بنجاح! تم حرق الكود من النظام وإضافة 3 محاولات للعب.");
+            alert("تم التحقق بنجاح! تم حرق الكود من النظام وضخ 3 محاولات جديدة مع الحفاظ على رصيد نقاطك السابقة.");
             userDatabase.availableAttempts += 3;
             validVouchers = validVouchers.filter(c => c !== inputCode);
             inputField.value = "";
+            
+            // إعادة ضبط نقاط الجلسة الحالية لتستند لأعلى رقم محفوظ بدلاً من الصفر
+            sessionScore = userDatabase.highScore;
             updateUI();
             startNewAttempt();
         } else {
@@ -173,14 +175,13 @@
         }
     }
 
-    function startNewAttempt() { sessionScore = 0; fetchCloudQuestion(); }
+    function startNewAttempt() { nextQuestion(); }
 
-    function fetchCloudQuestion() {
+    function nextQuestion() {
         clearInterval(timerInterval);
         timeLeft = 10;
         document.getElementById("timer").innerText = timeLeft;
 
-        // سحب سؤال عشوائي من الخزانة التي تحتوي على 500 توليفة منوعة
         const randomIndex = Math.floor(Math.random() * megaQuestionPool.length);
         currentQuestion = megaQuestionPool[randomIndex];
         document.getElementById("question-text").innerText = currentQuestion.q;
@@ -202,5 +203,3 @@
         }, 1000);
     }
 
-    function checkAnswer(selectedOption) {
-        clearInterval(timerInterval);
