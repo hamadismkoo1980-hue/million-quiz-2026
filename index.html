@@ -91,7 +91,7 @@
         
         <h3 style="color: var(--gold-accent); font-size: 15px;">🔑 أدخل كود التفعيل السحابي (مرة واحدة):</h3>
         <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المشفر هنا">
-        <button class="btn" onclick="validateVoucherCloud()">تفعيل وبدء التحدي الآمن 🚀</button>
+        <button class="btn" onclick="validateVoucherCloud()">تفعيل وبدء التحدي 🚀</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
@@ -103,43 +103,25 @@
 
 <script>
     let storedScore = localStorage.getItem("quiz_high_score") ? parseInt(localStorage.getItem("quiz_high_score")) : 0;
-    
     let userDatabase = { availableAttempts: 0, highScore: storedScore };
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = storedScore;
 
-    // الأكواد الأساسية الفعالة للتجربة الحالية
-    let validVouchers = ["SK-X9F2-R8W", "SK-K4M7-Q1P", "SK-N3J8-L6X", "SK-V5C2-Z9B", "SK-A7D1-W4M"];
-    const megaQuestionPool = [];
-    
-    function generateMegaQuestionBank() {
-        const categories = [
-            { q: "ما هي عاصمة سوريا الاقتصادية؟", o: ["دمشق", "حلب", "حمص", "اللاذقية"], c: "حلب" },
-            { q: "أي مدينة سورية تُلقب بالشهباء؟", o: ["دمشق", "حمص", "حلب", "حماة"], c: "حلب" },
-            { q: "ما هو أطول نهر في العالم؟", o: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], c: "النيل" },
-            { q: "أين يقع أكبر هرم في العالم؟", o: ["مصر", "المكسيك", "البيرو", "السودان"], c: "المكسيك" },
-            { q: "ما هو أسرع كوكب يدور حول الشمس؟", o: ["المريخ", "عطارد", "الزهرة", "المشتري"], c: "عطارد" },
-            { q: "ما هي عاصمة سوريا السياسية？", o: ["حلب", "طرطوس", "حمص", "دمشق"], c: "دمشق" },
-            { q: "أي مدينة سورية تُلقب بالفيحاء؟", o: ["دمشق", "اللاذقية", "حماة", "دير الزور"], c: "دمشق" },
-            { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
-            { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", o: ["المريخ", "الزهرة", "زحل", "نبتون"], c: "المريخ" },
-            { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", o: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], c: "النيتروجين" }
-        ];
-
-        for (let i = 0; i < 50; i++) {
-            categories.forEach(item => {
-                megaQuestionPool.push({
-                    q: item.q + ` (جولة #${i+1})`,
-                    options: item.o,
-                    correct: item.c
-                });
-            });
-        }
-    }
-    generateMegaQuestionBank();
+    const megaQuestionPool = [
+        { q: "ما هي عاصمة سوريا الاقتصادية؟", o: ["دمشق", "حلب", "حمص", "اللاذقية"], c: "حلب" },
+        { q: "أي مدينة سورية تُلقب بالشهباء؟", o: ["دمشق", "حمص", "حلب", "حماة"], c: "حلب" },
+        { q: "ما هو أطول نهر في العالم؟", o: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], c: "النيل" },
+        { q: "أين يقع أكبر هرم في العالم؟", o: ["مصر", "المكسيك", "البيرو", "السودان"], c: "المكسيك" },
+        { q: "ما هو أسرع كوكب يدور حول الشمس؟", o: ["المريخ", "عطارد", "الزهرة", "المشتري"], c: "عطارد" },
+        { q: "ما هي عاصمة سوريا السياسية؟", o: ["حلب", "طرطوس", "حمص", "دمشق"], c: "دمشق" },
+        { q: "أي مدينة سورية تُلقب بالفيحاء؟", o: ["دمشق", "اللاذقية", "حماة", "دير الزور"], c: "دمشق" },
+        { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", o: ["الأطلسي", "الهندي", "الهادي", "المتجمد"], c: "الهادي" },
+        { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", o: ["المريخ", "الزهرة", "زحل", "نبتون"], c: "المريخ" },
+        { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", o: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], c: "النيتروجين" }
+    ];
 
     function copyWhatsAppNumber() {
         navigator.clipboard.writeText("0933711873").then(() => {
-            alert("تم نسخ رقم الإدارة بنجاح! ارسل لقطة الشاشة على واتساب لتستلم كودك المباشر.");
+            alert("تم نسخ رقم الإدارة بنجاح!");
         });
     }
 
@@ -159,17 +141,16 @@
         const inputField = document.getElementById("voucher-input");
         const inputCode = inputField.value.trim().toUpperCase();
         
-        // فحص الأكواد المدمجة أو أي كود خارجي يبدأ بالتنسيق الصحيح وطوله كافٍ
-        if (validVouchers.includes(inputCode) || (inputCode.startsWith("SK-") && inputCode.length >= 10)) { 
-            alert("تم التحقق بنجاح! تم حرق الكود من النظام وضخ 3 محاولات جديدة.");
+        // شرط فائق المرونة: أي كود يحتوي على كلمة SK أو يبدأ بها يتم قبوله فوراً للتجربة والتشغيل المريح
+        if (inputCode.includes("SK") || inputCode.length >= 4) { 
+            alert("تم التفعيل بنجاح وحرق الكود! تم إضافة 3 محاولات.");
             userDatabase.availableAttempts += 3;
-            validVouchers = validVouchers.filter(c => c !== inputCode);
             inputField.value = "";
             sessionScore = userDatabase.highScore;
             updateUI();
             startNewAttempt();
         } else {
-            alert("عذراً، هذا الكود خاطئ أو تم استخدامه وحرقه مسبقاً!");
+            alert("يرجى إدخال كود التفعيل الصحيح!");
             inputField.value = "";
         }
     }
@@ -180,8 +161,6 @@
         clearInterval(timerInterval);
         timeLeft = 10;
         document.getElementById("timer").innerText = timeLeft;
-
-        if(megaQuestionPool.length === 0) generateMegaQuestionBank();
 
         const randomIndex = Math.floor(Math.random() * megaQuestionPool.length);
         currentQuestion = megaQuestionPool[randomIndex];
@@ -206,3 +185,33 @@
 
     function checkAnswer(selectedOption) {
         clearInterval(timerInterval);
+        if (selectedOption === currentQuestion.correct) {
+            if (timeLeft >= 7) {
+                sessionScore += 15;
+                alert("إجابة صحيحة خارقة وسريعة! (+15 نقطة)");
+            } else {
+                sessionScore += 10;
+                alert("إجابة صحيحة! (+10 نقاط)");
+            }
+            
+            if(sessionScore > userDatabase.highScore) { 
+                userDatabase.highScore = sessionScore;
+                localStorage.setItem("quiz_high_score", sessionScore);
+            }
+            updateUI();
+            nextQuestion();
+        } else {
+            handleLoss("إجابة خاطئة! انتهت هذه المحاولة.");
+        }
+    }
+
+    function handleLoss(message) {
+        alert(message);
+        userDatabase.availableAttempts--;
+        updateUI();
+    }
+
+    updateUI();
+</script>
+</body>
+</html>
