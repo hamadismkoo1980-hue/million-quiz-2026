@@ -9,7 +9,7 @@
         .profile-box { background: #3a506b; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around; font-weight: bold; }
         .btn { background: #00b4d8; color: white; border: none; padding: 12px 25px; margin: 10px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: 0.3s; width: 80%; text-decoration: none; display: inline-block; }
         .btn:hover { background: #90e0ef; color: #0b132b; }
-        .btn-whatsapp { background: #25D366; color: white !important; }
+        .btn-whatsapp { background: #25D366; color: white; }
         .btn-whatsapp:hover { background: #1ebd58; }
         .input-code { padding: 12px; width: 75%; font-size: 18px; text-align: center; border-radius: 5px; border: 2px solid #00b4d8; margin: 10px 0; background: #0b132b; color: white; }
         #timer { font-size: 28px; color: #ff4d6d; font-weight: bold; margin: 15px 0; }
@@ -33,11 +33,11 @@
         <div class="payment-info">
             <h3>💳 طريقة الاشتراك وتفعيل اللعب:</h3>
             <p>1. قم بتحويل قيمة الاشتراك (ما يعادل 1 دولار بالليرة) إلى حساب شام كاش رقم: <strong style="color: #00b4d8; font-size: 18px;">8020541796461939</strong></p>
-            <p>2. بعد التحويل، اضغط على الزر أدناه لإرسال إشعار التحويل عبر واتساب واستلام كود التفعيل فوراً.</p>
+            <p>2. بعد التحويل، اضغط على زر النسخ أدناه لتأخذ رقم الواتساب وتراسلنا لإرسال كود التفعيل فوراً.</p>
         </div>
         
-        <!-- الرابط العالمي المطور للواتساب لمنع الشاشة السوداء -->
-        <a href="https://whatsapp.com" target="_blank" class="btn btn-whatsapp">📱 اضغط هنا لإرسال إشعار التحويل عبر واتساب</a>
+        <!-- زر النسخ الذكي المضمون بدلاً من الرابط التلقائي المعطل -->
+        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 اضغط هنا لنسخ رقم واتساب الدعم فوراً</button>
         
         <hr style="border: 0.5px solid #3a506b; margin: 25px 0;">
         
@@ -56,19 +56,28 @@
 
 <script>
     let userDatabase = { availableAttempts: 0, highScore: 0 };
-
-    // الأكواد الصالحة للتفعيل
     const validVouchers = ["SHAM1122", "QUIZ2026", "WINNER77", "GOLD9988", "PRO9911"];
 
     const megaQuestionBank = [
         { q: "ما هو العنصر الكيميائي الأكثر وفرة في الكون؟", options: ["الأكسجين", "الهيدروجين", "النيتروجين", "الكربون"], correct: "الهيدروجين" },
-        { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض？", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
+        { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض؟", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
         { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
         { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حمص", "حلب", "اللاذقية"], correct: "حلب" }
     ];
 
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
+
+    // وظيفة النسخ الذكي لرقم الواتساب
+    function copyWhatsAppNumber() {
+        const number = "0933711873";
+        navigator.clipboard.writeText(number).then(() => {
+            alert("تم نسخ رقم الواتساب الخاص بالدعم ( " + number + " ) بنجاح!\n\nاذهب الآن إلى تطبيق الواتساب في هاتفك، وافتح محادثة جديدة مع الرقم المنسوخ وأرسل لقطة شاشة التحويل لتستلم كودك.");
+        }).catch(err => {
+            // حل بديل في حال رفض المتصفح إذن النسخ التلقائي
+            alert("يرجى نسخ الرقم يدوياً: " + number);
+        });
+    }
 
     function updateUI() {
         document.getElementById("attempts-display").innerText = userDatabase.availableAttempts;
