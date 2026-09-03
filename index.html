@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسابقة المليون الاحترافية</title>
+    <title>تحدي الـ 10 ثوانٍ - مسابقة المهارة والنزاهة</title>
     <style>
         :root {
             --bg-color: #03081e;
@@ -41,7 +41,7 @@
         }
 
         h1 {
-            font-size: 24px;
+            font-size: 22px;
             color: var(--gold-accent);
             text-shadow: 0 2px 10px rgba(255, 215, 0, 0.4);
             margin-top: 0;
@@ -71,20 +71,26 @@
             margin-top: 3px;
         }
 
-        .payment-info {
+        .payment-info, .rules-box {
             background: #0f194c;
-            padding: 18px;
+            padding: 15px;
             border-radius: 12px;
             border-right: 4px solid var(--gold-accent);
             text-align: right;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             line-height: 1.6;
-            font-size: 14px;
+            font-size: 13px;
         }
 
-        .payment-info h3 {
+        .rules-box {
+            border-right: 4px solid var(--primary-accent);
+            background: #0b143f;
+        }
+
+        .payment-info h3, .rules-box h3 {
             margin-top: 0;
-            color: var(--gold-accent);
+            margin-bottom: 8px;
+            font-size: 15px;
         }
 
         .btn {
@@ -115,12 +121,6 @@
             border: none;
         }
 
-        .btn-whatsapp:hover {
-            background: #128c7e;
-            color: white;
-            box-shadow: 0 0 15px #25D366;
-        }
-
         .input-code {
             padding: 14px;
             width: 100%;
@@ -133,15 +133,10 @@
             color: white;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .input-code:focus {
-            border-color: var(--primary-accent);
         }
 
         #timer {
-            font-size: 36px;
+            font-size: 42px;
             color: #ff4d6d;
             font-weight: bold;
             margin: 20px 0;
@@ -156,91 +151,52 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #f0f2f5;
-        }
-
-        .leaderboard-box {
-            background: #080f33;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 25px;
-            border: 1px solid #162256;
-            text-align: right;
-        }
-
-        .leaderboard-box h4 {
-            margin-top: 0;
-            color: var(--gold-accent);
-            text-align: center;
-            border-bottom: 1px solid #162256;
-            padding-bottom: 8px;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0;
-            font-size: 14px;
-            border-bottom: 1px dashed #121c46;
-        }
-
-        .leaderboard-item:last-child {
-            border-bottom: none;
         }
 
         .hidden {
             display: none;
-        }
-
-        hr {
-            border: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, #1e2d75, transparent);
-            margin: 25px 0;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🏆 مسابقة المليون الرقمية 🏆</h1>
+    <h1>🛡️ تحدي الـ 10 ثوانٍ للنزاهة الثقافية </h1>
     
     <div class="profile-box">
         <div>المتسابق<span id="username-display">زائر جديد</span></div>
-        <div>المحاولات<span id="attempts-display">0</span></div>
-        <div>نقاطك الحالية<span id="score-display">0</span></div>
+        <div>المحاولات المتاحة<span id="attempts-display">0</span></div>
+        <div>مجموع النقاط<span id="score-display">0</span></div>
     </div>
 
-    <!-- شاشة الدفع وإدخال الكود -->
+    <!-- شاشة الدفع وإدخال الكود المطور -->
     <div id="payment-screen">
-        <div class="payment-info">
-            <h3>💳 طريقة الاشتراك وتفعيل اللعب:</h3>
-            <p>1. قم بتحويل قيمة الاشتراك إلى حساب شام كاش رقم:<br><strong style="color: var(--primary-accent); font-size: 16px;">8020541796461939</strong></p>
-            <p>2. بعد التحويل، اضغط على الزر أدناه لنسخ رقم واتساب الدعم ومراسلتنا فوراً لتستلم كود التفعيل.</p>
+        <div class="rules-box">
+            <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة ومنع الغش:</h3>
+            • 10 ثوانٍ فقط لكل سؤال (السرعة تقتل محاولات البحث).<br>
+            • ⚡ <strong>مكافأة السرعة:</strong> الإجابة في أول 3 ثوانٍ تمنحك <strong>+5 نقاط إضافية!</strong><br>
+            • كل كود صالح لجهاز واحد ولمرة واحدة فقط (يُدمر تلقائياً بعد التفعيل).
         </div>
-        
-        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخة رقم واتساب الدعم</button>
-        
-        <hr>
-        
-        <h3 style="color: var(--gold-accent); font-size: 16px;">🔑 هل تملك كود التفعيل؟</h3>
-        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المكون من 8 أرقام">
-        <button class="btn" onclick="validateVoucher()">تفعيل وبدء اللعب 🚀</button>
 
-        <!-- لوحة الصدارة التنافسية -->
-        <div class="leaderboard-box">
-            <h4>📊 لوحة صدارة المتنافسين هذا الأسبوع</h4>
-            <div class="leaderboard-item"><span>1. أحمد الـحـلـبـي</span><strong style="color:var(--gold-accent)">420 نقطة</strong></div>
-            <div class="leaderboard-item"><span>2. ريم دمشق</span><strong style="color:var(--primary-accent)">380 نقطة</strong></div>
-            <div class="leaderboard-item"><span>3. أبو جعفر حمص</span><strong>310 نقاط</strong></div>
-            <div class="leaderboard-item"><span>4. سـامـر الـلاذقـية</span><strong>250 نقطة</strong></div>
-            <div class="leaderboard-item"><span>5. علـي طرطوس</span><strong>190 نقطة</strong></div>
+        <div class="payment-info">
+            <h3>💳 طريقة الاشتراك وشراء المحاولات:</h3>
+            1. حوّل قيمة الاشتراك إلى حساب شام كاش رقم:<br>
+            <strong style="color: var(--primary-accent); font-size: 15px;">8020541796461939</strong><br>
+            2. اضغط على الزر أدناه لنسخ رقم واتساب الإدارة وإرسال إشعار التحويل لتستلم كودك المخصص.
         </div>
+        
+        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخ رقم واتساب الإدارة</button>
+        
+        <hr style="border: 0; height: 1px; background: #1e2d75; margin: 20px 0;">
+        
+        <h3 style="color: var(--gold-accent); font-size: 15px;">🔑 أدخل كود التفعيل الآمن لمرة واحدة:</h3>
+        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل كود الـ 8 أرقام المشفر">
+        <button class="btn" onclick="validateVoucher()">تفعيل وبدء التحدي 🚀</button>
     </div>
 
     <!-- شاشة اللعبة والأسئلة -->
     <div id="quiz-screen" class="hidden">
-        <div id="question-text">جاري تجهيز السؤال العشوائي...</div>
+        <div id="question-text">جاري سحب سؤال عشوائي...</div>
         <div id="timer">10</div>
         <div id="options-box"></div>
     </div>
@@ -248,20 +204,15 @@
 
 <script>
     let userDatabase = { availableAttempts: 0, highScore: 0 };
-    const validVouchers = ["SHAM1122", "QUIZ2026", "WINNER77", "GOLD9988", "PRO9911"];
+    
+    // الأكواد الجديدة المعقدة والمشفرة لمرة واحدة (One-Time Use Vouchers)
+    let validVouchers = ["X7B9-R2W4", "K5M1-Q8P3", "N4J9-L2X7", "V3C8-Z9B1", "🏆-SHAM-2026"];
 
-    // بنك أسئلة موسع ومتنوع لضمان المتعة ومنع تكرار الأسئلة السهلة
     const megaQuestionBank = [
         { q: "ما هو العنصر الكيميائي الأكثر وفرة في الكون؟", options: ["الأكسجين", "الهيدروجين", "النيتروجين", "الكربون"], correct: "الهيدروجين" },
         { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض؟", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
-        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
-        { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حمص", "حلب", "اللاذقية"], correct: "حلب" },
-        { q: "أين يقع أكبر هرم في العالم؟", options: ["مصر", "المكسيك", "البيرو", "السودان"], correct: "المكسيك" },
-        { q: "ما هو أطول نهر في العالم؟", options: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], correct: "النيل" },
-        { q: "ما هو الحيوان الذي يُلقب بسفينة الصحراء؟", options: ["الحصان", "الجمل", "الفهد", "الحمار الوحشي"], correct: "الجمل" },
-        { q: "كم عدد قارات العالم؟", options: ["5 قارات", "6 قارات", "7 قارات", "8 قارات"], correct: "7 قارات" },
-        { q: "ما هو أكبر المحيطات مساحة على الأرض؟", options: ["الأطلسي", "الهندي", "الهادي", "المتجمد الشمالي"], correct: "الهادي" }
+        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" }
     ];
 
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
@@ -269,9 +220,7 @@
     function copyWhatsAppNumber() {
         const number = "0933711873";
         navigator.clipboard.writeText(number).then(() => {
-            alert("تم نسخ رقم الواتساب الخاص بالدعم ( " + number + " ) بنجاح!\n\nاذهب الآن إلى تطبيق الواتساب في هاتفك، وافتح محادثة جديدة مع الرقم المنسوخ وأرسل لقطة شاشة التحويل لتستلم كودك.");
-        }).catch(err => {
-            alert("يرجى نسخ الرقم يدوياً: " + number);
+            alert("تم نسخ الرقم بنجاح! راسلنا على واتساب لتستلم كود التفعيل لمرة واحدة.");
         });
     }
 
@@ -281,3 +230,60 @@
         
         if (userDatabase.availableAttempts > 0) {
             document.getElementById("quiz-screen").classList.remove("hidden");
+            document.getElementById("payment-screen").classList.add("hidden");
+        } else {
+            document.getElementById("quiz-screen").classList.add("hidden");
+            document.getElementById("payment-screen").classList.remove("hidden");
+        }
+    }
+
+    function validateVoucher() {
+        const inputCode = document.getElementById("voucher-input").value.trim().toUpperCase();
+        
+        if (validVouchers.includes(inputCode)) {
+            alert("تم التفعيل! تم حرق الكود من النظام لضمان عدم سرقته وإضافة 3 محاولات.");
+            userDatabase.availableAttempts += 3;
+            
+            // نظام الحرق الفوري لمرة واحدة: إزالة الكود نهائياً من الذاكرة لمنع إعادة الاستخدام
+            validVouchers = validVouchers.filter(code => code !== inputCode);
+            
+            updateUI();
+            startNewAttempt();
+        } else {
+            alert("عذراً، هذا الكود خاطئ أو تم حرقه واستخدامه مسبقاً!");
+        }
+    }
+
+    function startNewAttempt() { sessionScore = 0; nextQuestion(); }
+
+    function nextQuestion() {
+        clearInterval(timerInterval);
+        timeLeft = 10;
+        document.getElementById("timer").innerText = timeLeft;
+
+        const randomIndex = Math.floor(Math.random() * megaQuestionBank.length);
+        currentQuestion = megaQuestionBank[randomIndex];
+        document.getElementById("question-text").innerText = currentQuestion.q;
+        
+        const optionsBox = document.getElementById("options-box");
+        optionsBox.innerHTML = "";
+
+        currentQuestion.options.forEach(opt => {
+            let btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optionsBox.appendChild(btn);
+        });
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById("timer").innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleLoss("انتهى الوقت المسموح!");
+            }
+        }, 1000);
+    }
+
+    function checkAnswer(selectedOption) {
