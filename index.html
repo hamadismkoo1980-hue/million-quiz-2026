@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>نظام مسابقات المحترفين الذكي</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; text-align: center; padding: 20px; }
+        .container { background: #1c2541; max-width: 700px; margin: 30px auto; padding: 30px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); border: 1px solid #48cae4; }
+        .profile-box { background: #3a506b; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around; font-weight: bold; }
+        .btn { background: #00b4d8; color: white; border: none; padding: 12px 25px; margin: 10px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: 0.3s; width: 80%; }
+        .btn:hover { background: #90e0ef; color: #0b132b; }
+        .btn-pay { background: #2a9d8f; }
+        .btn-pay:hover { background: #e76f51; }
+        #timer { font-size: 28px; color: #ff4d6d; font-weight: bold; margin: 15px 0; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏆 مسابقة المليون الرقمية 🏆</h1>
+    
+    <!-- قسم حساب المستخدم والمحفظة -->
+    <div class="profile-box">
+        <div>المتسابق: <span id="username-display">شريكي العزيز</span></div>
+        <div>المحاولات المتاحة: <span id="attempts-display">0</span></div>
+        <div>النقاط الحالية: <span id="score-display">0</span></div>
+    </div>
+
+    <!-- شاشة الدفع وشراء المحاولات -->
+    <div id="payment-screen">
+        <h3>رصيد محاولاتك انتهى أو لم تشترك بعد!</h3>
+        <p>تكلفة الاشتراك ودخول المسابقة (شراء 3 محاولات) هي 1 دولار عبر محفظة شام كاش.</p>
+        <button class="btn btn-pay" onclick="simulateShamCashPayment()">💳 شحن 3 محاولات عبر شام كاش (1$)</button>
+    </div>
+
+    <!-- شاشة اللعبة والأسئلة -->
+    <div id="quiz-screen" class="hidden">
+        <h3 id="question-text">جاري تجهيز السؤال العشوائي...</h3>
+        <div id="timer">الوقت المتبقي: 10</div>
+        <div id="options-box"></div>
+    </div>
+</div>
+
+<script>
+    // محاكاة قاعدة بيانات السيرفر (Database)
+    let userDatabase = {
+        username: "شريكي المحترم",
+        availableAttempts: 0,
+        highScore: 0
+    };
+
+    // بنك أسئلة ضخم وموزع الصعوبة لمنع التكرار والغش
+    const megaQuestionBank = [
+        { q: "ما هو العنصر الكيميائي الأكثر وفرة في الكون؟", options: ["الأكسجين", "الهيدروجين", "النيتروجين", "الكربون"], correct: "الهيدروجين" },
+        { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض؟", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
+        { q: "ما هي العملة الرسمية الافتراضية المعتمدة في عقود الأتمتة؟", options: ["الدولار الرقمي", "USDT", "الريال الإلكتروني", "اليورو"], correct: "USDT" },
+        { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
+        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" }
+    ];
+
+    let currentQuestion;
+    let timerInterval;
+    let timeLeft = 10;
+    let sessionScore = 0;
+
+    // تحديث البيانات على الشاشة
+    function updateUI() {
+        document.getElementById("attempts-display").innerText = userDatabase.availableAttempts;
+        document.getElementById("score-display").innerText = userDatabase.highScore;
+        
+        if (userDatabase.availableAttempts > 0) {
+            document.getElementById("payment-screen").classList.add("hidden");
+            document.getElementById("quiz-screen").classList.remove("hidden");
+        } else {
+            document.getElementById("payment-screen").classList.remove("hidden");
+            document.getElementById("quiz-screen").classList.add("hidden");
+        }
+    }
+
+    // محاكاة عملية الدفع من حساب شام كاش الخاص بك
+    function simulateShamCashPayment() {
+        alert("جاري الاتصال ببوابة شام كاش للحساب الخاص بك...\nتم خصم 1$ بنجاح وتحويلها لحسابك كمالك للموقع!");
+        userDatabase.availableAttempts += 3; // إضافة 3 محاولات للمتسابق
+        updateUI();
+        startNewAttempt();
+    }
+
+    // بدء محاولة جديدة
+    function startNewAttempt() {
+        sessionScore = 0;
+        nextQuestion();
+    }
+
+    // سحب سؤال عشوائي وتفعيل مؤقت الـ 10 ثوانٍ الصارم لمنع الغش
+    function nextQuestion() {
+        clearInterval(timerInterval);
+        timeLeft = 10;
+        document.getElementById("timer").innerText = `الوقت المتبقي: ${timeLeft}`;
+
+        // سحب عشوائي تماماً من بنك الأسئلة
+        const randomIndex = Math.floor(Math.random() * megaQuestionBank.length);
+        currentQuestion = megaQuestionBank[randomIndex];
+
+        document.getElementById("question-text").innerText = currentQuestion.q;
+        const optionsBox = document.getElementById("options-box");
+        optionsBox.innerHTML = "";
+
+        currentQuestion.options.forEach(opt => {
+            let btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = opt;
+            btn.onclick = () => checkAnswer(opt);
+            optionsBox.appendChild(btn);
+        });
+
+        // مؤقت سريع جداً لمنع فتح متصفح آخر والبحث
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            document.getElementById("timer").innerText = `الوقت المتبقي: ${timeLeft}`;
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleLoss("انتهى الوقت! لم تكن سريعاً بما يكفي.");
+            }
+        }, 1000);
+    }
+
+    // التحقق من الإجابة
+    function checkAnswer(selectedOption) {
+        clearInterval(timerInterval);
+        if (selectedOption === currentQuestion.correct) {
+            sessionScore += 10; // إضافة نقاط
+            if(sessionScore > userDatabase.highScore) {
+                userDatabase.highScore = sessionScore;
+            }
+            alert("إجابة صحيحة! أحسنت.");
+            updateUI();
+            nextQuestion();
+        } else {
+            handleLoss("إجابة خاطئة! حاول مجدداً.");
+        }
+    }
+
+    // التعامل مع الخسارة وخصم المحاولة
+    function handleLoss(message) {
+        alert(message);
+        userDatabase.availableAttempts--;
+        updateUI();
+    }
+
+    // تشغيل النظام عند فتح الصفحة
+    updateUI();
+</script>
+</body>
+</html>
