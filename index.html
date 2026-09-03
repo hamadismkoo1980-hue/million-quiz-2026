@@ -106,6 +106,7 @@
     let userDatabase = { availableAttempts: 0, highScore: 0 };
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
 
+    // قائمة الأكواد الخمسة الرسمية والوحيدة الفعالة في هذه النسخة
     let validVouchers = ["SK-X9F2-R8W", "SK-K4M7-Q1P", "SK-N3J8-L6X", "SK-V5C2-Z9B", "SK-A7D1-W4M"];
 
     function copyWhatsAppNumber() {
@@ -127,16 +128,25 @@
     }
 
     function validateVoucherCloud() {
-        const inputCode = document.getElementById("voucher-input").value.trim().toUpperCase();
+        const inputField = document.getElementById("voucher-input");
+        const inputCode = inputField.value.trim().toUpperCase();
         
-        if (validVouchers.includes(inputCode) || inputCode.startsWith("SK-")) { 
-            alert("تم التحقق بنجاح! تم حرق الكود من النظام وإضافة 3 محاولات للعب.");
+        // نظام تحقق صارم وصارم: يجب أن يكون الكود موجوداً حصرياً في القائمة الرسمية المتبقية
+        if (validVouchers.includes(inputCode)) { 
+            alert("تم التحقق بنجاح! تم حرق الكود نهائياً من النظام وإضافة 3 محاولات.");
             userDatabase.availableAttempts += 3;
+            
+            // حرق الكود فوراً من القائمة لمنع إعادة استخدامه نهائياً
             validVouchers = validVouchers.filter(c => c !== inputCode);
+            
+            // الحل الجذري: تصفير خانة الإدخال فوراً لكي لا يتبقى لها أي أثر للضغط مجدداً
+            inputField.value = "";
+            
             updateUI();
             startNewAttempt();
         } else {
-            alert("عذراً، هذا الكود خاطئ أو تم حرقه واستخدامه مسبقاً!");
+            alert("عذراً، هذا الكود خاطئ، أو ليس من الأكواد المعتمدة، أو تم حرقه واستخدامه مسبقاً!");
+            inputField.value = ""; // تصفير الخانة عند الخطأ أيضاً للأمان
         }
     }
 
