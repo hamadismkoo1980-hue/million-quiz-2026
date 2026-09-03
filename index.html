@@ -2,17 +2,19 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>نظام مسابقات المحترفين الذكي</title>
+    <title>مسابقة المليون الاحترافية - نظام التفعيل</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0b132b; color: #ffffff; text-align: center; padding: 20px; }
         .container { background: #1c2541; max-width: 700px; margin: 30px auto; padding: 30px; border-radius: 15px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); border: 1px solid #48cae4; }
         .profile-box { background: #3a506b; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; justify-content: space-around; font-weight: bold; }
-        .btn { background: #00b4d8; color: white; border: none; padding: 12px 25px; margin: 10px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: 0.3s; width: 80%; }
+        .btn { background: #00b4d8; color: white; border: none; padding: 12px 25px; margin: 10px; cursor: pointer; border-radius: 5px; font-size: 16px; font-weight: bold; transition: 0.3s; width: 80%; text-decoration: none; display: inline-block; }
         .btn:hover { background: #90e0ef; color: #0b132b; }
-        .btn-pay { background: #2a9d8f; }
-        .btn-pay:hover { background: #e76f51; }
+        .btn-whatsapp { background: #25D366; }
+        .btn-whatsapp:hover { background: #1ebd58; color: white; }
+        .input-code { padding: 12px; width: 75%; font-size: 18px; text-align: center; border-radius: 5px; border: 2px solid #00b4d8; margin: 10px 0; background: #0b132b; color: white; }
         #timer { font-size: 28px; color: #ff4d6d; font-weight: bold; margin: 15px 0; }
         .hidden { display: none; }
+        .payment-info { background: #232f3e; padding: 15px; border-radius: 8px; border-left: 5px solid #2a9d8f; text-align: right; margin-bottom: 20px; }
     </style>
 </head>
 <body>
@@ -20,18 +22,28 @@
 <div class="container">
     <h1>🏆 مسابقة المليون الرقمية 🏆</h1>
     
-    <!-- قسم حساب المستخدم والمحفظة -->
     <div class="profile-box">
-        <div>المتسابق: <span id="username-display">شريكي العزيز</span></div>
+        <div>المتسابق: <span id="username-display">زائر جديد</span></div>
         <div>المحاولات المتاحة: <span id="attempts-display">0</span></div>
-        <div>النقاط الحالية: <span id="score-display">0</span></div>
+        <div>أعلى نقاط: <span id="score-display">0</span></div>
     </div>
 
-    <!-- شاشة الدفع وشراء المحاولات -->
+    <!-- شاشة الدفع اليدوي وإدخال الكود -->
     <div id="payment-screen">
-        <h3>رصيد محاولاتك انتهى أو لم تشترك بعد!</h3>
-        <p>تكلفة الاشتراك ودخول المسابقة (شراء 3 محاولات) هي 1 دولار عبر محفظة شام كاش.</p>
-        <button class="btn btn-pay" onclick="simulateShamCashPayment()">💳 شحن 3 محاولات عبر شام كاش (1$)</button>
+        <div class="payment-info">
+            <h3>💳 طريقة الاشتراك وتفعيل اللعب:</h3>
+            <p>1. قم بتحويل قيمة الاشتراك (ما يعادل 1 دولار بالليرة) إلى حساب شام كاش رقم: <strong style="color: #00b4d8; font-size: 18px;">8020541796461939</strong></p>
+            <p>2. بعد التحويل، اضغط على الزر أدناه لإرسال إشعار التحويل عبر واتساب واستلام كود التفعيل فوراً.</p>
+        </div>
+        
+        <!-- زر التحويل التلقائي للواتساب الخاص بك -->
+        <a href="https://wa.meً%20شريكي%20لقد%20قمت%20بالتحويل%20عبر%20شام%20كاش%20أريد%20كود%20تفعيل%20المسابقة" target="_blank" class="btn btn-whatsapp">📱 اضغط هنا لإرسال إشعار التحويل عبر واتساب</a>
+        
+        <hr style="border: 0.5px solid #3a506b; margin: 25px 0;">
+        
+        <h3>🔑 هل تملك كود التفعيل؟ أدخله هنا:</h3>
+        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المكون من 8 أرقام">
+        <button class="btn" onclick="validateVoucher()">تفعيل المحاولات وبدء اللعب 🚀</button>
     </div>
 
     <!-- شاشة اللعبة والأسئلة -->
@@ -43,28 +55,21 @@
 </div>
 
 <script>
-    // محاكاة قاعدة بيانات السيرفر (Database)
-    let userDatabase = {
-        username: "شريكي المحترم",
-        availableAttempts: 0,
-        highScore: 0
-    };
+    let userDatabase = { availableAttempts: 0, highScore: 0 };
 
-    // بنك أسئلة ضخم وموزع الصعوبة لمنع التكرار والغش
+    // قائمة الأكواد الصالحة للتفعيل لتعطيها للمشتركين بعد الدفع
+    const validVouchers = ["SHAM1122", "QUIZ2026", "WINNER77", "GOLD9988", "PRO9911"];
+
     const megaQuestionBank = [
         { q: "ما هو العنصر الكيميائي الأكثر وفرة في الكون؟", options: ["الأكسجين", "الهيدروجين", "النيتروجين", "الكربون"], correct: "الهيدروجين" },
         { q: "كم دقيقة تستغرق الشمس لتصل أشعتها إلى الأرض؟", options: ["8 دقائق", "5 دقائق", "12 دقيقة", "1 دقيقة"], correct: "8 دقائق" },
-        { q: "ما هي العملة الرسمية الافتراضية المعتمدة في عقود الأتمتة؟", options: ["الدولار الرقمي", "USDT", "الريال الإلكتروني", "اليورو"], correct: "USDT" },
         { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
-        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" }
+        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
+        { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حمص", "حلب", "اللاذقية"], correct: "حلب" }
     ];
 
-    let currentQuestion;
-    let timerInterval;
-    let timeLeft = 10;
-    let sessionScore = 0;
+    let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
 
-    // تحديث البيانات على الشاشة
     function updateUI() {
         document.getElementById("attempts-display").innerText = userDatabase.availableAttempts;
         document.getElementById("score-display").innerText = userDatabase.highScore;
@@ -78,27 +83,31 @@
         }
     }
 
-    // محاكاة عملية الدفع من حساب شام كاش الخاص بك
-    function simulateShamCashPayment() {
-        alert("جاري الاتصال ببوابة شام كاش للحساب الخاص بك...\nتم خصم 1$ بنجاح وتحويلها لحسابك كمالك للموقع!");
-        userDatabase.availableAttempts += 3; // إضافة 3 محاولات للمتسابق
-        updateUI();
-        startNewAttempt();
+    function validateVoucher() {
+        const inputCode = document.getElementById("voucher-input").value.trim().toUpperCase();
+        
+        if (validVouchers.includes(inputCode)) {
+            alert("تم التفعيل بنجاح! تم إضافة 3 محاولات لحسابك.");
+            userDatabase.availableAttempts += 3;
+            
+            // إزالة الكود مؤقتاً لضمان عدم استخدامه مجدداً في نفس الجلسة
+            const index = validVouchers.indexOf(inputCode);
+            if (index > -1) { validVouchers.splice(index, 1); }
+            
+            updateUI();
+            startNewAttempt();
+        } else {
+            alert("كود خاطئ أو تم استخدامه مسبقاً! يرجى التحقق أو التواصل مع الدعم.");
+        }
     }
 
-    // بدء محاولة جديدة
-    function startNewAttempt() {
-        sessionScore = 0;
-        nextQuestion();
-    }
+    function startNewAttempt() { sessionScore = 0; nextQuestion(); }
 
-    // سحب سؤال عشوائي وتفعيل مؤقت الـ 10 ثوانٍ الصارم لمنع الغش
     function nextQuestion() {
         clearInterval(timerInterval);
         timeLeft = 10;
         document.getElementById("timer").innerText = `الوقت المتبقي: ${timeLeft}`;
 
-        // سحب عشوائي تماماً من بنك الأسئلة
         const randomIndex = Math.floor(Math.random() * megaQuestionBank.length);
         currentQuestion = megaQuestionBank[randomIndex];
 
@@ -114,7 +123,6 @@
             optionsBox.appendChild(btn);
         });
 
-        // مؤقت سريع جداً لمنع فتح متصفح آخر والبحث
         timerInterval = setInterval(() => {
             timeLeft--;
             document.getElementById("timer").innerText = `الوقت المتبقي: ${timeLeft}`;
@@ -125,30 +133,25 @@
         }, 1000);
     }
 
-    // التحقق من الإجابة
     function checkAnswer(selectedOption) {
         clearInterval(timerInterval);
         if (selectedOption === currentQuestion.correct) {
-            sessionScore += 10; // إضافة نقاط
-            if(sessionScore > userDatabase.highScore) {
-                userDatabase.highScore = sessionScore;
-            }
+            sessionScore += 10;
+            if(sessionScore > userDatabase.highScore) { userDatabase.highScore = sessionScore; }
             alert("إجابة صحيحة! أحسنت.");
             updateUI();
             nextQuestion();
         } else {
-            handleLoss("إجابة خاطئة! حاول مجدداً.");
+            handleLoss("إجابة خاطئة! خرجت من المحاولة.");
         }
     }
 
-    // التعامل مع الخسارة وخصم المحاولة
     function handleLoss(message) {
         alert(message);
         userDatabase.availableAttempts--;
         updateUI();
     }
 
-    // تشغيل النظام عند فتح الصفحة
     updateUI();
 </script>
 </body>
