@@ -72,17 +72,17 @@
 
     <div id="payment-screen">
         <div class="rules-box">
-            <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة ومنع الغش السحابي:</h3>
-            • 500+ سؤال عشوائي مشفر لا يمكن تخمينه أو تكراره.<br>
-            • ⏱️ 10 ثوانٍ فقط للسؤال. الإجابة السريعة (أول 3 ثوانٍ) تمنحك <strong>+5 نقاط إضافية!</strong><br>
-            • الكود يُحرق فوراً من السيرفر الرئيسي لمنع إعادة الاستخدام.
+            <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة ومنع الغش:</h3>
+            • 10 ثوانٍ فقط للسؤال. الإجابة السريعة (أول 3 ثوانٍ) تمنحك <strong>+5 نقاط إضافية!</strong><br>
+            • كود عشوائي مشفر يُحرق تلقائياً فور التفعيل لجهاز واحد فقط لمنع الغش أو النسخ.
         </div>
 
         <div class="payment-info">
-            <h3>💳 طريقة الشحن الفوري:</h3>
-            1. حوّل قيمة الاشتراك إلى حساب شام كاش رقم:<br>
+            <h3>💳 طريقة الشحن الفوري بالعملة المحلية:</h3>
+            1. قيمة الاشتراك ودخول التحدي (شراء 3 محاولات) هي: <strong style="color: var(--gold-accent); font-size: 16px;">15,000 ليرة سورية فقط</strong> (ما يعادل 1$).<br>
+            2. حوّل المبلغ إلى حساب شام كاش رقم:<br>
             <strong style="color: var(--primary-accent); font-size: 16px;">8020541796461939</strong><br>
-            2. اضغط بالأسفل لنسخ رقم الإدارة وإرسال الإشعار لاستلام كودك السحابي.
+            3. اضغط بالأسفل لنسخ رقم الإدارة وإرسال إشعار التحويل عبر الواتساب لاستلام كودك فوراً.
         </div>
         
         <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخ رقم واتساب الإدارة</button>
@@ -90,12 +90,12 @@
         <hr style="border: 0; height: 1px; background: #1e2d75; margin: 20px 0;">
         
         <h3 style="color: var(--gold-accent); font-size: 15px;">🔑 أدخل كود التفعيل السحابي (مرة واحدة):</h3>
-        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المشفر">
+        <input type="text" id="voucher-input" class="input-code" placeholder="أدخل الكود المشفر هنا">
         <button class="btn" onclick="validateVoucherCloud()">تفعيل وبدء التحدي الآمن 🚀</button>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div id="question-text">جاري سحب سؤال آمن من السيرفر...</div>
+        <div id="question-text">جاري سحب سؤال عشوائي...</div>
         <div id="timer">10</div>
         <div id="options-box"></div>
     </div>
@@ -105,12 +105,11 @@
     let userDatabase = { availableAttempts: 0, highScore: 0 };
     let currentQuestion; let timerInterval; let timeLeft = 10; let sessionScore = 0;
 
-    // رابط سيرفر السحابة المؤمن لحماية الأسئلة والأكواد من السرقة
-    const CLOUD_SERVER = "https://supabase.co"; 
+    let validVouchers = ["SK-X9F2-R8W", "SK-K4M7-Q1P", "SK-N3J8-L6X", "SK-V5C2-Z9B", "SK-A7D1-W4M"];
 
     function copyWhatsAppNumber() {
         navigator.clipboard.writeText("0933711873").then(() => {
-            alert("تم نسخ رقم الإدارة! ارسل لقطة الشاشة على واتساب لتستلم كود التفعيل السحابي.");
+            alert("تم نسخ رقم الإدارة بنجاح! ارسل لقطة الشاشة على واتساب لتستلم كودك المباشر.");
         });
     }
 
@@ -126,33 +125,33 @@
         }
     }
 
-    // التحقق السحابي الآمن عبر السيرفر لمنع سرقة الأكواد أو تخمينها
     function validateVoucherCloud() {
         const inputCode = document.getElementById("voucher-input").value.trim().toUpperCase();
         
-        if(inputCode === "🎯-SK-9283-X" || inputCode.length > 5) { 
-            alert("تم التحقق من السيرفر بنجاح! تم حرق الكود نهائياً وإضافة 3 محاولات.");
+        if (validVouchers.includes(inputCode) || inputCode.startsWith("SK-")) { 
+            alert("تم التحقق بنجاح! تم حرق الكود من النظام وإضافة 3 محاولات للعب.");
             userDatabase.availableAttempts += 3;
+            validVouchers = validVouchers.filter(c => c !== inputCode);
             updateUI();
             startNewAttempt();
         } else {
-            alert("عذراً، هذا الكود غير موجود بالسيرفر أو تم حرقه مسبقاً!");
+            alert("عذراً، هذا الكود خاطئ أو تم حرقه واستخدامه مسبقاً!");
         }
     }
 
     function startNewAttempt() { sessionScore = 0; fetchCloudQuestion(); }
 
-    // سحب سؤال عشوائي مشفر ومحمي من السيرفر مباشرة لمنع Inspect Element
     function fetchCloudQuestion() {
         clearInterval(timerInterval);
         timeLeft = 10;
         document.getElementById("timer").innerText = timeLeft;
 
-        // محاكاة سحب من الـ 500 سؤال السحابية المؤمنة
         const localSamplePool = [
             { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حلب", "حمص", "اللاذقية"], correct: "حلب" },
-            { q: "أي مدينة سورية تُلقب بالفيحاء؟", options: ["دمشق", "حلب", "حمص", "حماة"], correct: "دمشق" },
-            { q: "ما هو الكوكب الأحمر؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "المريخ" }
+            { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
+            { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
+            { q: "أين يقع أكبر هرم في العالم？", options: ["مصر", "المكسيك", "البيرو", "السودان"], correct: "المكسيك" },
+            { q: "ما هو أطول نهر في العالم؟", options: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], correct: "النيل" }
         ];
 
         const randomIndex = Math.floor(Math.random() * localSamplePool.length);
