@@ -1,207 +1,90 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تحدي الـ 10 ثوانٍ للنزاهة الثقافية</title>
-    <style>
-        :root {
-            --bg-color: #03081e;
-            --primary-accent: #00f2fe;
-            --gold-accent: #ffd700;
-            --text-main: #ffffff;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(circle, #0c164f 0%, var(--bg-color) 100%);
-            color: var(--text-main);
-            margin: 0; padding: 10px;
-            display: flex; justify-content: center; align-items: center;
-            min-height: 100vh; box-sizing: border-box;
-        }
-        .container {
-            background: rgba(10, 17, 56, 0.95);
-            width: 100%; max-width: 500px;
-            border-radius: 20px; padding: 25px 20px;
-            box-shadow: 0 0 30px rgba(0, 242, 254, 0.2);
-            border: 2px solid #1e295d; text-align: center;
-            box-sizing: border-box;
-        }
-        h1 { font-size: 22px; color: var(--gold-accent); margin-bottom: 20px; }
-        .profile-box {
-            background: #121b4d; padding: 12px; border-radius: 12px;
-            margin-bottom: 25px; display: flex; justify-content: space-between;
-            font-size: 13px; border: 1px solid #1e2d75;
-        }
-        .profile-box span { color: var(--primary-accent); font-weight: bold; display: block; font-size: 16px; }
-        .payment-info, .rules-box {
-            background: #0f194c; padding: 15px; border-radius: 12px;
-            border-right: 4px solid var(--gold-accent); text-align: right;
-            margin-bottom: 20px; line-height: 1.6; font-size: 13px;
-        }
-        .rules-box { border-right: 4px solid var(--primary-accent); background: #0b143f; }
-        .btn {
-            background: linear-gradient(90deg, #102375 0%, #1b36ab 100%);
-            color: white; border: 1px solid var(--primary-accent);
-            padding: 16px 20px; margin: 10px 0; cursor: pointer;
-            border-radius: 30px; font-size: 16px; font-weight: bold;
-            width: 100%; box-sizing: border-box; transition: 0.3s;
-        }
-        .btn:hover { background: var(--primary-accent); color: #03081e; box-shadow: 0 0 15px var(--primary-accent); }
-        .btn-whatsapp { background: linear-gradient(90deg, #1ebd58 0%, #25D366 100%); border: none; }
-        .input-code {
-            padding: 14px; width: 100%; font-size: 18px; text-align: center;
-            border-radius: 30px; border: 2px solid #1e2d75; margin: 15px 0;
-            background: #060b26; color: white; box-sizing: border-box;
-        }
-        #timer { font-size: 42px; color: #ff4d6d; font-weight: bold; margin: 20px 0; }
-        #question-text { font-size: 18px; line-height: 1.5; margin-bottom: 30px; min-height: 60px; color: #ffffff; }
-        .hidden { display: none; }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>🛡️ تحدي الـ 10 ثوانٍ للنزاهة الثقافية</h1>
-    
-    <div class="profile-box">
-        <div>المتسابق<span id="username-display">زائر جديد</span></div>
-        <div>المحاولات<span id="attempts-display">0</span></div>
-        <div>رقمك القياسي🏆<span id="score-display">0</span></div>
-    </div>
-
-    <div id="payment-screen">
-        <div class="rules-box">
-            <h3 style="color: var(--primary-accent);">⚖️ شروط النزاهة والجوائز:</h3>
-            • 🚀 <strong>الجائزة الكبرى:</strong> تبدأ من <span style="color: var(--gold-accent); font-weight: bold;">1,500</span> وتصل حتى <span style="color: var(--gold-accent); font-weight: bold;">30,000 ليرة جديدة</span>.<br>
-            • ⏱️ 10 ثوانٍ فقط للسؤال. بنك خفيف ومحدّث بـ 100 جولة تنافسية تمنحك المتعة والنزاهة المطلقة!
-        </div>
-
-        <div class="payment-info">
-            <h3>💳 طريقة الشحن الفوري بالعملة المحلية:</h3>
-            1. قيمة الاشتراك ودخول التحدي (3 محاولات) هي: <strong style="color: var(--gold-accent); font-size: 16px;">150 ليرة جديدة فقط</strong>.<br>
-            2. حوّل المبلغ إلى حساب شام كاش رقم:<br>
-            <strong style="color: var(--primary-accent); font-size: 16px;">8020541796461939</strong><br>
-            3. انسخ رقم الإدارة وأرسل إشعار التحويل عبر الواتساب لاستلام كودك فوراً.
-        </div>
-        
-        <button class="btn btn-whatsapp" onclick="copyWhatsAppNumber()">📋 نسخ رقم واتساب الإدارة</button>
-        
-        <hr style="border: 0; height: 1px; background: #1e2d75; margin: 20px 0;">
-        
-        <h3 style="color: var(--gold-accent); font-size: 15px;">🔑 أدخل كود التفعيل السحابي (مرة واحدة):</h3>
-        <input type="text" id="voucher-input" class="input-code" placeholder="اكتب أي كلمة للتفعيل الفوري">
-        <button class="btn" onclick="validateVoucherCloud()">تفعيل وبدء التحدي 🚀</button>
-    </div>
-
-    <div id="quiz-screen" class="hidden">
-        <div id="question-text">جاري تحميل السؤال...</div>
-        <div id="timer">10</div>
-        <div id="options-box"></div>
-    </div>
-</div>
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>تحدي الـ10 ثوانٍ للنزاهة الثقافية</title>
+<style>
+:root{--bg:#03081e;--panel:#0d153e;--line:#24306b;--cyan:#00f2fe;--gold:#ffd700;--red:#ff4d6d;--green:#25d366;--muted:#aeb9df}
+*{box-sizing:border-box} body{margin:0;min-height:100vh;padding:16px;background:radial-gradient(circle at top,#0c164f,var(--bg) 68%);color:#fff;font-family:Segoe UI,Tahoma,Arial,sans-serif;display:flex;align-items:center;justify-content:center}
+.container{width:min(560px,100%);background:rgba(9,16,52,.98);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 0 35px #00f2fe20}h1{text-align:center;color:var(--gold);font-size:24px;margin:0 0 16px}
+.notice{padding:10px 12px;border:1px solid #705d15;background:#211b06;border-radius:12px;color:#ffe98a;font-size:12px;line-height:1.6;margin-bottom:12px}.hidden{display:none!important}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}.stat{background:#121b4d;border:1px solid var(--line);border-radius:13px;padding:9px;text-align:center;color:var(--muted);font-size:12px}.stat b{display:block;color:var(--cyan);font-size:18px;margin-top:3px}
+.panel{background:var(--panel);border-radius:14px;padding:14px;margin-bottom:12px;border-right:4px solid var(--cyan);line-height:1.7;font-size:13px}.gold{border-right-color:var(--gold)}
+input{width:100%;padding:13px 14px;margin:6px 0 10px;border-radius:12px;border:1px solid #2b3d83;background:#060b26;color:#fff;font-size:16px}button{width:100%;border:1px solid var(--cyan);border-radius:13px;padding:13px;margin:6px 0;background:linear-gradient(90deg,#102375,#1b36ab);color:#fff;font-weight:700;font-size:15px;cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.green{background:linear-gradient(90deg,#159a47,#25d366);border:0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.timer{font-size:40px;font-weight:800;color:var(--red);min-width:70px;text-align:center}.small{color:var(--muted);font-size:12px}.progress{height:7px;background:#111a40;border-radius:99px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--cyan),var(--gold))}
+#question{font-size:20px;line-height:1.55;min-height:70px;margin:12px 0}.option{background:#101a45;border-color:#293a7b;text-align:right}.option.correct{background:#0d4d2e;border-color:#3ee093}.option.wrong{background:#551d2d;border-color:#ff708b}.status{min-height:20px;font-size:13px;margin-top:5px}.ok{color:#62e6a2}.err{color:#ff8198}
+table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid #223066;font-size:12px;text-align:right}th{color:var(--gold)}
+</style></head>
+<body><main class="container">
+<h1>🛡️ تحدي الـ10 ثوانٍ للنزاهة الثقافية</h1>
+<div id="demo" class="notice hidden">وضع تجريبي. للتشغيل المدفوع الحقيقي يجب استخدام خادم للتحقق من الأكواد والنتائج. كود الاختبار: <b>DEMO10</b></div>
+<div class="stats"><div class="stat">المتسابق<b id="nameOut">زائر</b></div><div class="stat">المحاولات<b id="attemptsOut">0</b></div><div class="stat">النقاط<b id="scoreOut">0</b></div></div>
+<section id="setup">
+<div class="panel gold"><b>⚖️ القواعد</b><br>10 ثوانٍ لكل سؤال. كل سؤال يستهلك محاولة واحدة، سواء كانت الإجابة صحيحة أو خاطئة أو انتهى الوقت. لا تتكرر الأسئلة داخل الجولة.</div>
+<div class="panel"><label>اسم المتسابق</label><input id="name" maxlength="40" placeholder="الاسم الظاهر في لوحة الصدارة"><label>كود التفعيل</label><input id="voucher" autocomplete="one-time-code" placeholder="أدخل الكود"><button id="activate" onclick="activate()">تفعيل وبدء التحدي 🚀</button><div id="setupStatus" class="status"></div></div>
+<div class="panel gold"><b>💳 الدفع</b><br>اترك بيانات الدفع التي ستستخدمها في الإنتاج، لكن لا تتحقق من الدفع داخل JavaScript؛ التحقق يجب أن يتم على الخادم.</div>
+</section>
+<section id="game" class="hidden">
+<div class="row"><div class="small">السؤال <span id="num">1</span> من <span id="total">10</span><div class="progress"><i id="bar"></i></div></div><div id="timer" class="timer">10</div></div>
+<div id="question">...</div><div id="options"></div><div id="gameStatus" class="status"></div>
+</section>
+<section id="results" class="hidden">
+<div class="panel gold"><b>🏆 انتهت الجولة</b><br>النتيجة النهائية: <b id="final">0</b></div>
+<button class="green" onclick="submitScore()">حفظ النتيجة في لوحة الصدارة</button><div id="submitStatus" class="status"></div>
+<div class="panel"><b>📊 لوحة الصدارة</b><table><thead><tr><th>#</th><th>المتسابق</th><th>النقاط</th></tr></thead><tbody id="leaders"><tr><td colspan="3">تحتاج لوحة الصدارة إلى API حقيقي.</td></tr></tbody></table></div>
+</section>
+<div class="small" style="text-align:center;margin-top:10px">الأمان الفعلي لا يمكن ضمانه من الواجهة الأمامية وحدها.</div>
+</main>
 <script>
-    let storedScore = localStorage.getItem("quiz_high_score") ? parseInt(localStorage.getItem("quiz_high_score")) : 0;
-    let userDatabase = { availableAttempts: 0, highScore: storedScore };
-    let timeLeft = 10;
-    let timerInterval;
-
-    const megaQuestionPool = [
-        { q: "ما هي عاصمة سوريا الاقتصادية؟", options: ["دمشق", "حلب", "حمص", "اللاذقية"], correct: "حلب" },
-        { q: "أي مدينة سورية تُلقب بالشهباء؟", options: ["دمشق", "حمص", "حلب", "حماة"], correct: "حلب" },
-        { q: "ما هو أطول نهر في العالم؟", options: ["الأمازون", "النيل", "الفرات", "المسيسيبي"], correct: "النيل" },
-        { q: "أين يقع أكبر هرم في العالم؟", options: ["مصر", "المكسيك", "البيرو", "السودان"], correct: "المكسيك" },
-        { q: "ما هو أسرع كوكب يدور حول الشمس؟", options: ["المريخ", "عطارد", "الزهرة", "المشتري"], correct: "عطارد" },
-        { q: "ما هي عاصمة سوريا السياسية؟", options: ["حلب", "طرطوس", "حمص", "دمشق"], correct: "دمشق" },
-        { q: "أي مدينة سورية تُلقب بالفيحاء؟", options: ["دمشق", "اللاذقية", "حماة", "دير الزور"], correct: "دمشق" },
-        { q: "أكبر المحيطات مساحة على كوكب الأرض هو المحيط:", options: ["الأتلسي", "الهندي", "الهادي", "المتجمد"], correct: "الهادي" },
-        { q: "ما هو الكوكب الأحمر في النظام الشمسي؟", options: ["المريخ", "الزهرة", "زحل", "نبتون"], correct: "المريخ" },
-        { q: "ما هو الغاز الأكثر وفرة في الغلاف الجوي للأرض؟", options: ["الأكسجين", "النيتروجين", "الهيدروجين", "الأرجون"], correct: "النيتروجين" }
-    ];
-
-    function copyWhatsAppNumber() {
-        navigator.clipboard.writeText("0933711873").then(() => {
-            alert("تم نسخ رقم الإدارة بنجاح!");
-        });
-    }
-
-    function updateUI() {
-        document.getElementById("attempts-display").innerText = userDatabase.availableAttempts;
-        document.getElementById("score-display").innerText = userDatabase.highScore;
-        if (userDatabase.availableAttempts > 0) {
-            document.getElementById("quiz-screen").classList.remove("hidden");
-            document.getElementById("payment-screen").classList.add("hidden");
-        } else {
-            document.getElementById("quiz-screen").classList.add("hidden");
-            document.getElementById("payment-screen").classList.remove("hidden");
-        }
-    }
-
-    function validateVoucherCloud() {
-        const inputField = document.getElementById("voucher-input");
-        
-        // الأمان المطلق والمرن: يقبل أي إدخال تجنباً لأخطاء طول النصوص في المتصفحات القديمة
-        alert("تم التفعيل بنجاح! تم إضافة 3 محاولات جاهزة.");
-        userDatabase.availableAttempts = 3;
-        inputField.value = "";
-        updateUI();
-        nextQuestion();
-    }
-
-    function nextQuestion() {
-        clearInterval(timerInterval);
-        if (userDatabase.availableAttempts <= 0) {
-            alert("انتهت محاولاتك! يرجى إعادة الشحن.");
-            updateUI();
-            return;
-        }
-
-        timeLeft = 10;
-        document.getElementById("timer").innerText = timeLeft;
-
-        const randomIndex = Math.floor(Math.random() * megaQuestionPool.length);
-        let currentQuestion = megaQuestionPool[randomIndex];
-        
-        document.getElementById("question-text").innerText = currentQuestion.q;
-        
-        const optionsBox = document.getElementById("options-box");
-        optionsBox.innerHTML = "";
-
-        currentQuestion.options.forEach(opt => {
-            let btn = document.createElement("button");
-            btn.className = "btn";
-            btn.innerText = opt;
-            btn.onclick = function() {
-                clearInterval(timerInterval);
-                if (opt === currentQuestion.correct) {
-                    alert("إجابة صحيحة!");
-                    userDatabase.highScore += 10;
-                    localStorage.setItem("quiz_high_score", userDatabase.highScore);
-                } else {
-                    alert("إجابة خاطئة!");
-                    userDatabase.availableAttempts--;
-                }
-                updateUI();
-                nextQuestion();
-            };
-            optionsBox.appendChild(btn);
-        });
-
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            document.getElementById("timer").innerText = timeLeft;
-            if (timeLeft <= 0) { 
-                clearInterval(timerInterval); 
-                alert("انتهى الوقت!"); 
-                userDatabase.availableAttempts--;
-                updateUI();
-                nextQuestion();
-            }
-        }, 1000);
-    }
-
-    updateUI();
-</script>
-</body>
-</html>
+const CONFIG={
+  DEMO_MODE:true,
+  API_BASE_URL:'',
+  QUESTIONS_PER_GAME:10,
+  TIME_LIMIT:10,
+  ATTEMPTS_PER_CODE:3
+};
+const POOL=[
+['ما هي عاصمة سوريا السياسية؟',['حلب','دمشق','حمص','طرطوس'],'دمشق'],
+['أي مدينة سورية تُلقب بالشهباء؟',['دمشق','حماة','حلب','حمص'],'حلب'],
+['أكبر المحيطات مساحة على كوكب الأرض هو المحيط:',['الأطلسي','الهندي','الهادي','المتجمد الشمالي'],'الهادي'],
+['ما هو أسرع كوكب في دورته حول الشمس؟',['المريخ','عطارد','الزهرة','المشتري'],'عطارد'],
+['ما الغاز الأكثر وفرة في الغلاف الجوي للأرض؟',['الأكسجين','النيتروجين','الهيدروجين','الأرجون'],'النيتروجين'],
+['ما الكوكب المعروف بالكوكب الأحمر؟',['المريخ','الزهرة','زحل','نبتون'],'المريخ'],
+['ما أكبر كوكب في النظام الشمسي؟',['الأرض','المشتري','زحل','نبتون'],'المشتري'],
+['في أي قارة تقع سوريا؟',['آسيا','أفريقيا','أوروبا','أمريكا الجنوبية'],'آسيا'],
+['ما البحر الذي تقع عليه مدينة اللاذقية؟',['الأحمر','المتوسط','بحر العرب','قزوين'],'المتوسط'],
+['أي عنصر كيميائي رمزه O؟',['الذهب','الأكسجين','الحديد','الهيدروجين'],'الأكسجين'],
+['بماذا ارتبطت مدينة تدمر تاريخياً؟',['الحضارة التدمرية','حضارة المايا','حضارة الإنكا','روما فقط'],'الحضارة التدمرية'],
+['ما اللغة الرسمية في سوريا؟',['العربية','الفرنسية','الإنجليزية','الآرامية'],'العربية']
+].map(([q,options,correct])=>({q,options,correct}));
+let S={name:'',attempts:0,score:0,questions:[],index:0,current:null,timer:null,gameId:'',submitted:false};
+const $=id=>document.getElementById(id);
+function status(id,text,ok=false){$(id).textContent=text||'';$(id).className='status '+(text?(ok?'ok':'err'):'');}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function update(){ $('nameOut').textContent=S.name||'زائر'; $('attemptsOut').textContent=S.attempts; $('scoreOut').textContent=S.score; }
+async function activate(){
+ S.name=$('name').value.trim();const voucher=$('voucher').value.trim();
+ if(!S.name)return status('setupStatus','اكتب اسم المتسابق أولاً.'); if(!voucher)return status('setupStatus','أدخل كود التفعيل.');
+ $('activate').disabled=true;status('setupStatus','جارٍ التحقق...');
+ try{let r;
+   if(CONFIG.DEMO_MODE && voucher==='DEMO10'){r={ok:true,attempts:CONFIG.ATTEMPTS_PER_CODE,token:'DEMO'};}
+   else if(CONFIG.API_BASE_URL){let res=await fetch(CONFIG.API_BASE_URL+'/api/voucher/consume',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({voucher,username:S.name})});r=await res.json();if(!res.ok)throw Error(r.message||'فشل التحقق');}
+   else throw Error('الخادم غير مهيأ.');
+   if(!r.ok)throw Error(r.message||'كود غير صالح');
+   S.attempts=Number(r.attempts||CONFIG.ATTEMPTS_PER_CODE);S.questions=shuffle(POOL).slice(0,Math.min(CONFIG.QUESTIONS_PER_GAME,POOL.length));S.index=0;S.score=0;S.submitted=false;S.gameId=crypto.randomUUID?crypto.randomUUID():String(Date.now());
+   $('setup').classList.add('hidden');$('game').classList.remove('hidden');$('results').classList.add('hidden');$('total').textContent=S.questions.length;update();render();
+ }catch(e){status('setupStatus',e.message||'تعذر التفعيل.')}finally{$('activate').disabled=false}
+}
+function render(){clearInterval(S.timer);if(S.attempts<=0||S.index>=S.questions.length)return finish();S.current=S.questions[S.index];$('num').textContent=S.index+1;$('bar').style.width=(S.index/S.questions.length*100)+'%';$('question').textContent=S.current.q;$('gameStatus').textContent='';
+ let box=$('options');box.innerHTML='';shuffle(S.current.options).forEach(opt=>{let b=document.createElement('button');b.className='option';b.textContent=opt;b.onclick=()=>answer(b,opt);box.appendChild(b)});
+ let t=CONFIG.TIME_LIMIT;$('timer').textContent=t;S.timer=setInterval(()=>{t--; $('timer').textContent=t;if(t<=0){clearInterval(S.timer);lock();S.attempts--;status('gameStatus','⏰ انتهى الوقت — تم استهلاك محاولة.');update();setTimeout(next,650)}},1000);
+}
+function lock(){document.querySelectorAll('.option').forEach(b=>b.disabled=true)}
+function answer(btn,opt){clearInterval(S.timer);lock();if(opt===S.current.correct){btn.classList.add('correct');S.score+=10;status('gameStatus','✅ إجابة صحيحة +10 نقاط.',true)}else{btn.classList.add('wrong');document.querySelectorAll('.option').forEach(b=>{if(b.textContent===S.current.correct)b.classList.add('correct')});status('gameStatus','❌ إجابة خاطئة.')}S.attempts--;update();setTimeout(next,700)}
+function next(){S.index++;render()}
+function finish(){clearInterval(S.timer);$('game').classList.add('hidden');$('results').classList.remove('hidden');$('final').textContent=S.score;update();loadLeaderboard()}
+async function submitScore(){if(S.submitted)return;try{if(CONFIG.DEMO_MODE){S.submitted=true;return status('submitStatus','وضع تجريبي: لم تُحفظ النتيجة على خادم.',true)}if(!CONFIG.API_BASE_URL)throw Error('API_BASE_URL غير مهيأ.');let res=await fetch(CONFIG.API_BASE_URL+'/api/score',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({gameId:S.gameId,username:S.name,score:S.score})});let r=await res.json();if(!res.ok)throw Error(r.message||'فشل الحفظ');S.submitted=true;status('submitStatus','تم حفظ النتيجة.',true);loadLeaderboard()}catch(e){status('submitStatus',e.message||'فشل الإرسال.')}}
+async function loadLeaderboard(){let body=$('leaders');if(CONFIG.DEMO_MODE||!CONFIG.API_BASE_URL){body.innerHTML='<tr><td colspan="3">لوحة الصدارة الحقيقية تحتاج API خادم.</td></tr>';return}try{let r=await (await fetch(CONFIG.API_BASE_URL+'/api/leaderboard')).json();body.innerHTML='';r.slice(0,20).forEach((x,i)=>{let tr=document.createElement('tr');tr.innerHTML='<td>'+(i+1)+'</td><td>'+esc(x.username)+'</td><td>'+Number(x.score||0)+'</td>';body.appendChild(tr)})}catch{body.innerHTML='<tr><td colspan="3">تعذر تحميل النتائج.</td></tr>'}}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+$('demo').classList.toggle('hidden',!CONFIG.DEMO_MODE);update();
+</script></body></html>
