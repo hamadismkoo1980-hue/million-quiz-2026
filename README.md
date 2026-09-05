@@ -9,7 +9,7 @@
         :root {
             --primary-gold: #ffd700;
             --secondary-gold: #ffaa00;
-            --panel-bg: rgba(13, 22, 45, 0.9);
+            --panel-bg: rgba(13, 22, 45, 0.95);
             --neon-blue: #00f0ff;
             --success-green: #00ff88;
             --danger-red: #ff3366;
@@ -32,7 +32,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow-x: hidden;
             padding: 15px;
         }
 
@@ -44,13 +43,12 @@
             background: var(--panel-bg);
             border: 2px solid var(--primary-gold);
             border-radius: 24px;
-            padding: 30px;
+            padding: 25px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
                         0 0 30px rgba(255, 215, 0, 0.2);
-            backdrop-filter: blur(15px);
         }
 
-        .header { text-align: center; margin-bottom: 25px; }
+        .header { text-align: center; margin-bottom: 20px; }
 
         .title {
             font-size: 2.2rem;
@@ -67,13 +65,13 @@
             border: 1.5px solid var(--secondary-gold);
             border-radius: 16px;
             padding: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
         .payment-methods {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 15px;
             margin-top: 15px;
         }
@@ -82,7 +80,7 @@
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 215, 0, 0.3);
             border-radius: 12px;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
         }
 
@@ -115,20 +113,56 @@
             box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
         }
 
-        .activation-box { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        /* خانة التفعيل والاسم */
+        .activation-panel {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--primary-gold);
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .inputs-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
 
         .code-input, .name-input {
-            flex: 1; min-width: 180px; padding: 12px; border-radius: 10px;
-            border: 1px solid var(--primary-gold);
-            background: rgba(0, 0, 0, 0.5); color: #fff; text-align: center;
-            font-size: 1rem;
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1.5px solid var(--primary-gold);
+            background: #050a19;
+            color: #fff;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            outline: none;
+        }
+
+        .code-input:focus, .name-input:focus {
+            box-shadow: 0 0 10px var(--primary-gold);
         }
 
         .btn-start {
             background: linear-gradient(180deg, var(--primary-gold) 0%, var(--secondary-gold) 100%);
-            color: #000; font-weight: 900; padding: 12px 30px;
-            border: none; border-radius: 10px; cursor: pointer; font-size: 1.1rem;
-            width: 100%; margin-top: 10px;
+            color: #000;
+            font-weight: 900;
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.2s;
+        }
+
+        .btn-start:hover {
+            transform: scale(1.02);
         }
 
         .game-hud {
@@ -184,7 +218,7 @@
             border-color: var(--danger-red) !important; color: #fff !important;
         }
 
-        .result-screen { display: none; text-align: center; padding: 20px; }
+        .result-screen { text-align: center; padding: 20px; }
         .result-title { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; }
         .result-title.win { color: var(--primary-gold); }
         .result-title.lose { color: var(--danger-red); }
@@ -209,40 +243,40 @@
             <p class="sub-title">🔥 تحدي الـ 10 ثوانٍ - 50 سؤالاً عشوائياً 🔥</p>
         </div>
 
-        <!-- START SCREEN -->
+        <!-- الشاشة الأولى: التفعيل والشروط -->
         <div id="startScreen">
             <div class="payment-panel">
-                <h3>💳 طرق وشروط الاشتراك (1$ فقط)</h3>
+                <h3 style="color: var(--primary-gold);">💳 طرق الدفع والاشتراك (1$ فقط)</h3>
                 <div class="payment-methods">
                     <div class="pay-card sham">
                         <h4 style="color: var(--sham-cash-green);">🇸🇾 Sham Cash</h4>
                         <p style="font-size: 0.85rem; color: #bbb;">رقم المحفظة:</p>
-                        <div class="wallet-num" style="color: var(--sham-cash-green); font-size: 1rem;">8020541796461939</div>
+                        <div class="wallet-num" style="color: var(--sham-cash-green);">8020541796461939</div>
                     </div>
                     <div class="pay-card crypto">
-                        <h4 style="color: var(--crypto-purple);">🌐 Crypto Wallet (USDT / ETH)</h4>
-                        <p style="font-size: 0.85rem; color: #bbb;">عنوان المحفظة (EVM):</p>
+                        <h4 style="color: var(--crypto-purple);">🌐 Crypto (USDT / ETH)</h4>
+                        <p style="font-size: 0.85rem; color: #bbb;">العنوان (EVM):</p>
                         <div class="wallet-num" style="color: var(--crypto-purple);">0x91516f1011c415ff30cB2B0825d939Ba4FF03505</div>
                     </div>
                 </div>
                 <button class="btn-whatsapp" onclick="openWhatsApp()">
-                    📲 إرسال إثبات الدفع لـ واتساب الإدارة (00963933711873)
+                    📲 إرسال إثبات الدفع عبر الواتساب للحصول على الكود
                 </button>
             </div>
 
-            <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px;">
-                <p style="text-align: center; margin-bottom: 10px; font-weight: bold; color: var(--primary-gold);">
-                    أدخل بياناتك وكود التفعيل لبدء التحدي:
-                </p>
-                <div class="activation-box">
-                    <input type="text" id="playerName" class="name-input" placeholder="اسمك الكريم">
-                    <input type="text" id="accessCode" class="code-input" placeholder="كود التفعيل (مثل: DEMO10)">
-                    <button class="btn-start" onclick="startGame()">ابدأ التحدي 🚀</button>
+            <!-- لوحة التفعيل والدخول -->
+            <div class="activation-panel">
+                <h3 style="color: var(--primary-gold);">🔑 تسجيل الدخول للمسابقة</h3>
+                <p style="font-size: 0.9rem; color: #ddd; margin-top: 5px;">أدخل اسمك وكود التفعيل الذي تسلمته من الإدارة:</p>
+                <div class="inputs-group">
+                    <input type="text" id="playerName" class="name-input" placeholder="أدخل اسمك الكريـم">
+                    <input type="text" id="accessCode" class="code-input" placeholder="أدخل كود التفعيل (مثال: DEMO10)">
+                    <button class="btn-start" onclick="startGame()">ابدأ التحدي الان 🚀</button>
                 </div>
             </div>
         </div>
 
-        <!-- GAME SCREEN -->
+        <!-- شاشة اللعبة -->
         <div id="gameScreen" class="hidden">
             <div class="game-hud">
                 <div class="hud-item">
@@ -266,8 +300,8 @@
             <div class="options-grid" id="optionsContainer"></div>
         </div>
 
-        <!-- RESULT SCREEN -->
-        <div id="resultScreen" class="result-screen">
+        <!-- شاشة النتيجة -->
+        <div id="resultScreen" class="result-screen hidden">
             <h2 id="resultTitle" class="result-title">تهانينا! 🎉</h2>
             <p id="resultSubtitle" style="font-size: 1.2rem; color: #ddd;"></p>
             <div style="font-size: 1.5rem; margin: 20px 0; color: var(--neon-blue);" id="finalScore">الرصيد: $0</div>
@@ -276,7 +310,7 @@
     </div>
 
     <script>
-        // الأكواد المسموح بها للدخول
+        // قائمة الأكواد المفعلة لتجربتها
         const validCodes = ["DEMO10", "WIN2026", "VIP100", "CASH2026", "USER001", "USER002"];
         const usedCodes = [];
 
@@ -386,7 +420,7 @@
             const codeInput = document.getElementById('accessCode').value.trim().toUpperCase();
 
             if (!nameInput) {
-                alert("يرجى إدخال اسمك الكريم!");
+                alert("يرجى إدخال اسمك الكريم أولاً!");
                 return;
             }
 
@@ -401,7 +435,7 @@
             }
 
             if (!validCodes.includes(codeInput)) {
-                alert("كود التفعيل غير صحيح! يرجى التواصل مع الإدارة عبر الواتساب للحصول على كود مفعل.");
+                alert("كود التفعيل غير صحيح! تواصل مع الإدارة للحصول على الكود.");
                 return;
             }
 
