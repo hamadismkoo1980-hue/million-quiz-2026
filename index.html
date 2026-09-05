@@ -1,54 +1,52 @@
-from pathlib import Path
-import zipfile, re
+// قائمة الأكواد المقبولة (يمكنك إضافة أي عدد من الأكواد هنا)
+const validCodes = [
+    "DEMO10",
+    "WIN2026",
+    "VIP100",
+    "CASH2026",
+    "USER001",
+    "USER002"
+];
 
-src = Path("/mnt/data/نص واحد ملصق (1).txt")
-text = src.read_text(encoding="utf-8")
+// مصفوفة لتخزين الأكواد المستعملة حتى لا تُستخدم مرتين
+const usedCodes = [];
 
-# Use the user's supplied public contact values in the frontend configuration.
-text = text.replace("API_BASE_URL:''", "API_BASE_URL:'https://YOUR-BACKEND-DOMAIN.example.com'")
-# Remove demo-only behavior and replace the payment panel with concrete contact info.
-text = text.replace(
-    'وضع تجريبي. للتشغيل المدفوع الحقيقي يجب استخدام خادم للتحقق من الأكواد والنتائج. كود الاختبار: <b>DEMO10</b>',
-    'رسوم المشاركة: 1 دولار — الدفع عبر Sham Cash ثم أرسل رقم العملية إلى واتساب الإدارة للحصول على كود الدخول.'
-)
-text = re.sub(
-    r'<div class="panel gold"><b>💳 الدفع</b><br>.*?</div>',
-    '<div class="panel gold"><b>💳 طريقة الدفع</b><br>'
-    'حوّل ما يعادل <b>1$</b> عبر <b>Sham Cash</b> إلى المحفظة:<br>'
-    '<div style="font-size:20px;font-weight:800;color:#ffd700;direction:ltr;text-align:center;padding:9px">'
-    '8020541796461939</div>'
-    'ثم أرسل رقم العملية عبر واتساب الإدارة:<br>'
-    '<div style="font-size:19px;font-weight:800;color:#25d366;direction:ltr;text-align:center;padding:9px">'
-    '00963933711873</div>'
-    '<button class="green" onclick="openWhatsApp()">📲 إرسال إثبات الدفع عبر واتساب</button>'
-    '</div>',
-    text,
-    flags=re.S
-)
-# Add helper button function before activate()
-anchor = "async function activate(){"
-helper = r"""
-function openWhatsApp(){
-  const name=($('name').value||'').trim()||'غير محدد';
-  const msg=`مرحباً، أريد الاشتراك في تحدي الـ10 ثوانٍ.\nالاسم: ${name}\nقمت بتحويل رسم المشاركة عبر Sham Cash إلى المحفظة المعروضة في الموقع.\nأرجو التحقق وإرسال كود التفعيل.`;
-  window.open('https://wa.me/963933711873?text='+encodeURIComponent(msg),'_blank');
+function startGame() {
+    const nameInput = document.getElementById('playerName').value.trim();
+    const codeInput = document.getElementById('accessCode').value.trim().toUpperCase();
+
+    if (!nameInput) {
+        alert("يرجى إدخال اسمك الكريم!");
+        return;
+    }
+
+    if (!codeInput) {
+        alert("يرجى إدخال كود التفعيل!");
+        return;
+    }
+
+    // التحقق من أن الكود تم استخدامه سابقاً
+    if (usedCodes.includes(codeInput)) {
+        alert("عذراً، هذا الكود مستخدم من قبل!");
+        return;
+    }
+
+    // التحقق من صحة الكود
+    if (!validCodes.includes(codeInput)) {
+        alert("كود التفعيل غير صحيح! يرجى التواصل مع الإدارة للحصول على كود مفعل.");
+        return;
+    }
+
+    // تعليم الكود كـ "مُستخدم"
+    usedCodes.push(codeInput);
+
+    playerName = nameInput;
+    document.getElementById('hudName').innerText = playerName;
+    currentQuestions = [...questionBank].sort(() => Math.random() - 0.5);
+    currentIndex = 0; score = 0;
+
+    document.getElementById('startScreen').classList.add('hidden');
+    document.getElementById('resultScreen').classList.add('hidden');
+    document.getElementById('gameScreen').classList.remove('hidden');
+    loadQuestion();
 }
-"""
-text = text.replace(anchor, helper + anchor, 1)
-
-# In the configuration make the supplied numbers explicit.
-text = re.sub(r"WHATSAPP_NUMBER:'.*?'", "WHATSAPP_NUMBER:'00963933711873'", text)
-text = re.sub(r"WALLET_NUMBER:'.*?'", "WALLET_NUMBER:'8020541796461939'", text)
-
-outdir = Path("/mnt/data/million-quiz-simple")
-outdir.mkdir(exist_ok=True)
-out = outdir / "index.html"
-out.write_text(text, encoding="utf-8")
-
-zip_path = Path("/mnt/data/million-quiz-simple.zip")
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-    z.write(out, "index.html")
-
-print("تم تجهيز النسخة المبسطة.")
-print(out)
-print(zip_path)
