@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مسابقة المليون 2026 - تحدي الـ 10 ثوانٍ</title>
-    <!-- خط أميري وجوجل لتصميم أنيق -->
     <link href="https://googleapis.com" rel="stylesheet">
     <link rel="stylesheet" href="https://cloudflare.com">
     
@@ -16,294 +15,140 @@
             --bg-card: #1c2541;
             --text-light: #ffffff;
             --text-muted: #bdc3c7;
+            --correct: #27ae60;
+            --incorrect: #c0392b;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Cairo', sans-serif;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Cairo', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        
+        .container { background-color: var(--bg-card); border: 2px solid var(--primary); border-radius: 15px; padding: 30px; width: 100%; max-width: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); text-align: center; position: relative; }
+        h1 { color: var(--primary); margin-bottom: 20px; font-size: 26px; }
+        p { margin-bottom: 15px; line-height: 1.6; }
+        
+        .btn { background-color: var(--primary); color: var(--bg-dark); border: none; padding: 12px 25px; font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer; transition: 0.3s; width: 100%; margin-top: 15px; }
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        
+        .info-box { background: rgba(212, 175, 55, 0.1); border-right: 4px solid var(--primary); padding: 15px; border-radius: 6px; text-align: right; margin: 20px 0; font-size: 14px; }
+        .info-box h3 { color: var(--primary); margin-bottom: 8px; }
+        .info-box ul { padding-right: 20px; }
+        
+        .wallet-section { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; margin: 20px 0; }
+        .wallet-item { display: flex; justify-content: space-between; align-items: center; background: #111a36; padding: 10px 15px; border-radius: 6px; margin-bottom: 10px; border: 1px solid rgba(212, 175, 55, 0.2); }
+        .wallet-info { text-align: right; }
+        .wallet-label { font-size: 12px; color: var(--text-muted); display: block; }
+        .wallet-num { font-size: 15px; font-weight: bold; letter-spacing: 1px; }
+        
+        .copy-btn { background: var(--primary); color: var(--bg-dark); border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 5px; }
+        .audio-control { position: absolute; top: 15px; left: 15px; background: rgba(255,255,255,0.1); border: none; color: var(--primary); width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--correct); color: #fff; padding: 10px 20px; border-radius: 30px; font-weight: bold; transition: 0.3s; z-index: 1000; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
 
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: hidden;
-        }
-
-        .container {
-            background-color: var(--bg-card);
-            border: 2px solid var(--primary);
-            border-radius: 15px;
-            padding: 30px;
-            width: 100%;
-            max-width: 600px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            text-align: center;
-            position: relative;
-        }
-
-        h1 {
-            color: var(--primary);
-            margin-bottom: 20px;
-            font-size: 28px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
-
-        p {
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            background-color: var(--primary);
-            color: var(--bg-dark);
-            border: none;
-            padding: 12px 25px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: 15px;
-        }
-
-        .btn:hover {
-            background-color: var(--primary-hover);
-            transform: translateY(-2px);
-        }
-
-        /* صندوق آلية الربح */
-        .info-box {
-            background: rgba(212, 175, 55, 0.1);
-            border-right: 4px solid var(--primary);
-            padding: 15px;
-            border-radius: 6px;
-            text-align: right;
-            margin: 20px 0;
-            font-size: 15px;
-        }
-
-        .info-box h3 {
-            color: var(--primary);
-            margin-bottom: 8px;
-        }
-
-        .info-box ul {
-            padding-right: 20px;
-        }
-
-        .info-box li {
-            margin-bottom: 5px;
-        }
-
-        /* المحافظ والنسخ */
-        .wallet-section {
-            background: rgba(255,255,255,0.05);
-            padding: 15px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .wallet-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: #111a36;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        .wallet-info {
-            text-align: right;
-        }
-
-        .wallet-label {
-            font-size: 13px;
-            color: var(--text-muted);
-            display: block;
-        }
-
-        .wallet-num {
-            font-size: 16px;
-            font-weight: bold;
-            color: var(--text-light);
-            letter-spacing: 1px;
-        }
-
-        .copy-btn {
-            background: var(--primary);
-            color: var(--bg-dark);
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: 0.2s;
-        }
-
-        .copy-btn:hover {
-            background: #fff;
-        }
-
-        /* عناصر الموسيقى والتحكم بالصوت */
-        .audio-control {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: rgba(255,255,255,0.1);
-            border: none;
-            color: var(--primary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-
-        /* رسالة التنبيه العائمة للنسخ */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: #27ae60;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-        }
+        /* شاشات اللعب والأسئلة */
+        .screen { display: none; }
+        .screen.active { display: block; }
+        
+        .timer-circle { width: 80px; height: 80px; border-radius: 50%; border: 4px solid var(--primary); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin: 20px auto; color: var(--primary); }
+        .question-text { font-size: 20px; font-weight: bold; margin-bottom: 20px; text-align: right; }
+        
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; margin-bottom: 20px; }
+        .option-btn { background: #1c2541; border: 2px solid rgba(255,255,255,0.1); padding: 12px; border-radius: 8px; color: #fff; text-align: right; font-size: 16px; cursor: pointer; transition: 0.2s; }
+        .option-btn:hover { border-color: var(--primary); background: rgba(212, 175, 55, 0.05); }
+        
+        .code-input { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); background: #111a36; color: #fff; font-size: 18px; text-align: center; margin-bottom: 15px; }
+        .progress-bar { font-size: 14px; color: var(--text-muted); margin-bottom: 10px; text-align: right; }
     </style>
 </head>
 <body>
 
-    <!-- موسيقى كلاسيكية هادئة مدمجة (رابط صوتي عام ومستقر) -->
     <audio id="bg-music" loop>
         <source src="https://soundhelix.com" type="audio/mp3">
     </audio>
 
     <div class="container">
-        <!-- زر كتم وتفعيل الموسيقى -->
         <button class="audio-control" id="music-toggle" onclick="toggleMusic()">
             <i class="fas fa-music"></i>
         </button>
 
-        <h1>🏆 مسابقة المليون 2026 🏆</h1>
-        <p>تحدَّ ذكاءك وسرعتك في الإجابة على الأسئلة خلال 10 ثوانٍ فقط واربح جوائز نقدية حقيقية!</p>
+        <!-- الشاشة 1: شاشة البداية وشرح الربح -->
+        <div id="start-screen" class="screen active">
+            <h1>🏆 مسابقة المليون 2026 🏆</h1>
+            <p>تحدَّ ذكاءك وسرعتك في الإجابة على الأسئلة خلال 10 ثوانٍ فقط واربح جوائز نقدية حقيقية!</p>
 
-        <!-- ثالثاً: شرح آلية الربح بالتفصيل للمتسابق -->
-        <div class="info-box">
-            <h3>ℹ️ آلية اللعب والربح:</h3>
-            <ul>
-                <li>تتكون المسابقة من أسئلة متتالية تمنحك نقاطاً عند الإجابة الصحيحة.</li>
-                <li>يجب عليك الإجابة على كل سؤال خلال <b>10 ثوانٍ فقط</b> وإلا ستخسر الجولة.</li>
-                <li>عند تجميع الحد الأدنى من النقاط، سيتم تحويل جائزتك النقدية مباشرةً لحسابك.</li>
-                <li>لتفعيل اشتراكك وبدء احتساب الأرباح، قم بنسخ أحد أرقام الدفع أدناه وتفعيل الكود الخاص بك.</li>
-            </ul>
-        </div>
-
-        <!-- أولاً: قسم المحافظ الإلكترونية مع ميزة النسخ بضغطة واحدة -->
-        <div class="wallet-section">
-            <p style="font-size: 14px; margin-bottom: 10px; color: var(--primary);">حسابات الدفع المعتمدة لتفعيل الأكواد والجوائز (اضغط لنسخ الرقم فوراً):</p>
-            
-            <!-- شام كاش -->
-            <div class="wallet-item">
-                <div class="wallet-info">
-                    <span class="wallet-label">حساب شام كاش (Sham Cash)</span>
-                    <span class="wallet-num" id="sham-num">8020541796</span>
-                </div>
-                <button class="copy-btn" onclick="copyNumber('8020541796', 'شام كاش')">
-                    <i class="far fa-copy"></i> نسخ
-                </button>
+            <div class="info-box">
+                <h3>ℹ️ آلية اللعب والربح:</h3>
+                <ul>
+                    <li>تتكون المسابقة من 15 سؤالاً ثقافياً منوعاً لتصل للمليون.</li>
+                    <li>يجب الإجابة على كل سؤال خلال <b>10 ثوانٍ فقط</b> عبر العداد التنازلي.</li>
+                    <li>عند تجميع النقاط والنجاح، يفتح لك خيار تفعيل كود الأرباح.</li>
+                    <li>لتفعيل اشتراكك واستلام الجائزة، انسخ أحد الأرقام المعتمدة أدناه.</li>
+                </ul>
             </div>
 
-            <!-- المحفظة الإلكترونية العامة / الكريبتو -->
-            <div class="wallet-item">
-                <div class="wallet-info">
-                    <span class="wallet-label">المحفظة الإلكترونية (Crypto / E-Wallet)</span>
-                    <span class="wallet-num" id="crypto-num">6419392220391</span>
+            <div class="wallet-section">
+                <p style="font-size: 13px; margin-bottom: 10px; color: var(--primary);">حسابات الدفع المعتمدة لتفعيل الأكواد (اضغط لنسخ الرقم):</p>
+                <div class="wallet-item">
+                    <div class="wallet-info">
+                        <span class="wallet-label">حساب شام كاش (Sham Cash)</span>
+                        <span class="wallet-num">8020541796</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyNumber('8020541796', 'شام كاش')"><i class="far fa-copy"></i></button>
                 </div>
-                <button class="copy-btn" onclick="copyNumber('6419392220391', 'المحفظة الإلكترونية')">
-                    <i class="far fa-copy"></i> نسخ
-                </button>
+                <div class="wallet-item">
+                    <div class="wallet-info">
+                        <span class="wallet-label">المحفظة الإلكترونية (Crypto / E-Wallet)</span>
+                        <span class="wallet-num">6419392220391</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyNumber('6419392220391', 'المحفظة')"><i class="far fa-copy"></i></button>
+                </div>
             </div>
+
+            <button class="btn" onclick="showScreen('activation-screen')">الانتقال لتفعيل الكود وبدء اللعب 🚀</button>
         </div>
 
-        <button class="btn" onclick="startChallenge()">ابدأ تحدي الـ 10 ثوانٍ الآن 🚀</button>
+        <!-- الشاشة 2: تفعيل الكود للبدء -->
+        <div id="activation-screen" class="screen">
+            <h1>🔐 تفعيل كود الاشتراك</h1>
+            <p>أدخل كود التفعيل الممنوح لك بعد تفعيل الاشتراك عبر أحد الحسابات المعتمدة للبدء بالجولة:</p>
+            <input type="text" id="activation-code" class="code-input" placeholder="اكتب كود التفعيل هنا">
+            <button class="btn" onclick="verifyActivationCode()">تحقق وابدأ التحدي ⚡</button>
+            <button class="btn" style="background:none; color:var(--text-muted); border:1px solid rgba(255,255,255,0.2);" onclick="showScreen('start-screen')">رجوع للخلف</button>
+        </div>
+
+        <!-- الشاشة 3: شاشة الأسئلة واللعب -->
+        <div id="game-screen" class="screen">
+            <div class="progress-bar" id="progress-text">السؤال: 1 من 15</div>
+            <div class="timer-circle" id="timer-display">10</div>
+            <div class="question-text" id="question-display">جاري تحميل السؤال...</div>
+            <div class="options-grid" id="options-container"></div>
+        </div>
+
+        <!-- الشاشة 4: النتيجة والخسارة أو الفوز -->
+        <div id="result-screen" class="screen">
+            <h1 id="result-title">انتهت اللعبة!</h1>
+            <p id="result-msg"></p>
+            <button class="btn" onclick="restartGame()">محاولة مرة أخرى 🔄</button>
+        </div>
     </div>
 
-    <!-- التنبيه العائم -->
-    <div class="toast" id="toast">تم نسخ الرقم بنجاح!</div>
+    <div class="toast" id="toast">تم النسخ بنجاح!</div>
 
     <script>
-        const audio = document.getElementById('bg-music');
-        const musicToggle = document.getElementById('music-toggle');
+        // الأكواد المعتمدة للتفعيل
+        const validCodes = ["M2026", "SHAM99", "VIP777", "WIN100"];
 
-        // تشغيل الموسيقى تلقائياً بمجرد نقر المستخدم على أي مكان في الشاشة (قيود المتصفحات الحديثة)
-        document.body.addEventListener('click', () => {
-            if (audio.paused && !audio.muted) {
-                audio.play().catch(e => console.log("المتصفح يمنع التشغيل التلقائي حتى التفاعل الحقيقي"));
-            }
-        }, { once: true });
-
-        // ثانياً: تفعيل وإيقاف الموسيقى الكلاسيكية
-        function toggleMusic() {
-            if (audio.paused) {
-                audio.play();
-                musicToggle.innerHTML = '<i class="fas fa-music"></i>';
-                musicToggle.style.color = "var(--primary)";
-            } else {
-                audio.pause();
-                musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
-                musicToggle.style.color = "var(--text-muted)";
-            }
-        }
-
-        // أولاً: دالة نسخ الأرقام الذكية والمتوافقة مع الهواتف والكمبيوتر
-        function copyNumber(number, walletName) {
-            navigator.clipboard.writeText(number).then(() => {
-                showToast(`تم نسخ رقم ${walletName} بنجاح!`);
-            }).catch(err => {
-                // حل بديل في حال لم يدعم المتصفح الميزة مباشرة
-                const el = document.createElement('textarea');
-                el.value = number;
-                document.body.appendChild(el);
-                el.select();
-                document.execCommand('copy');
-                document.body.removeChild(el);
-                showToast(`تم نسخ رقم ${walletName} بنجاح!`);
-            });
-        }
-
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.innerText = message;
-            toast.classList.add('show');
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 2500);
-        }
-
-        function startChallenge() {
+        // بنك الأسئلة الـ 15 الأساسي
+        const questions = [
+            { q: "ما هي عاصمة سوريا؟", opts: ["حلب", "دمشق", "حمص", "اللاذقية"], ans: 1 },
+            { q: "كم عدد كواكب المجموعة الشمسية؟", opts: ["7 كواكب", "8 كواكب", "9 كواكب", "6 كواكب"], ans: 1 },
+            { q: "من هو مخترع المصباح الكهربائي؟", opts: ["توماس إديسون", "نيقولا تيسلا", "جراهام بيل", "نيوتن"], ans: 0 },
+            { q: "ما هو أكبر المحيطات في العالم؟", opts: ["المحيط الأطلسي", "المحيط الهندي", "المحيط الهادئ", "المحيط المتجمد"], ans: 2 },
+            { q: "ما هو المعدن الوحيد الذي يكون سائلاً في درجة الحرارة العادية؟", opts: ["الحديد", "الزئبق", "النحاس", "الألمنيوم"], ans: 1 },
+            { q: "ما هو أطول نهر في العالم؟", opts: ["نهر الأمازون", "نهر النيل", "نهر الميسيسيبي", "نهر الفرات"], ans: 1 },
+            { q: "في أي قارة تقع مصر؟", opts: ["آسيا", "أوروبا", "أفريقيا", "أستراليا"], ans: 2 },
+            { q: "ما هو الكائن الحي الذي يمتلك 3 قلوب؟", opts: ["الأخطبوط", "الحوت", "الدلفين", "القرش"], ans: 0 },
+            { q: "من هو هداف التاريخ لكرة القدم؟", opts: ["ليونيل ميسي", "بيليه", "كريستيانو رونالدو", "مارادونا"], ans: 2 },
+            { q: "ما هي العملة الرسمية لليابان؟", opts: ["اليوان", "الين", "الدولار", "الريال"], ans: 1 },
+            { q: "كم عدد ألوان قوس قزح؟", opts: ["6 ألوان", "7 ألوان", "8 ألوان", "5 ألوان"], ans: 1 },
+            { q: "ما هو الغاز الأساسي المسبب للاحتباس الحراري؟", opts: ["الأكسجين", "النيتروجين", "ثاني أكسيد الكربون", "الهيدروجين"], ans: 2 },
